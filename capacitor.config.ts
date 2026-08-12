@@ -15,6 +15,9 @@ const config: CapacitorConfig = {
     androidScheme: 'https',
     // 允许的导航主机（cpolar 域名经常变，CapacitorHttp 模式下 API 请求不走 WebView，留空即可）
     allowNavigation: [],
+    // iOS 端同样需要 HTTPS 环境，通过 CapacitorHttp 原生请求绕过 WebView CORS
+    // ⚠️ ATS 例外必须在 Info.plist 里配置（NSAllowsArbitraryLoads 或具体域名），
+    //    capacitor.config.ts 本身无法控制 ATS 策略
   },
   android: {
     // 允许混合内容（如果后端临时用了 http 资源）

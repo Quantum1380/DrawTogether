@@ -61,8 +61,8 @@ jobs:
       - name: Sync iOS
         run: npx cap sync ios
 
-      # ============ 配置 Info.plist（必须在 sync 之后，否则被覆盖）============
-      - name: Configure Info.plist (通讯录权限)
+      # ============ 配置 Info.plist（通讯录权限 + ATS 明文 HTTP）============
+      - name: Configure Info.plist (通讯录权限 + ATS)
         run: |
           PLIST=ios/App/App/Info.plist
           if [ ! -f "$PLIST" ]; then
@@ -72,13 +72,25 @@ jobs:
           fi
           echo "=== Info.plist 路径: $PLIST ==="
 
-          # 删除可能存在的旧字段（忽略错误）
+          # --- 通讯录权限 ---
           /usr/libexec/PlistBuddy -c "Delete :NSContactsUsageDescription" "$PLIST" 2>/dev/null || true
-          # 添加通讯录权限描述
           /usr/libexec/PlistBuddy -c "Add :NSContactsUsageDescription string 需要访问通讯录以发现已注册的好友并邀请一起游戏" "$PLIST"
+          echo "✅ 通讯录权限已配置"
 
-          echo "=== 验证 Info.plist 通讯录权限 ==="
+          # --- ATS 明文 HTTP 例外（当前用服务器公网 IP + HTTP，iOS 默认禁止）---
+          # 删除旧值（忽略错误）
+          /usr/libexec/PlistBuddy -c "Delete :NSAppTransportSecurity" "$PLIST" 2>/dev/null || true
+          # 添加 NSAllowsArbitraryLoads = true（允许所有 HTTP 明文请求）
+          # 将来买了域名 + SSL 后，改为具体域名例外更安全：
+          #   /usr/libexec/PlistBuddy -c "Add :NSAppTransportSecurity:NSExceptionDomains:yourdomain.com:NSIncludesSubdomains bool true" "$PLIST"
+          #   /usr/libexec/PlistBuddy -c "Add :NSAppTransportSecurity:NSExceptionDomains:yourdomain.com:NSThirdPartyExceptionAllowsInsecureHTTPLoads bool true" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :NSAppTransportSecurity dict" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :NSAppTransportSecurity:NSAllowsArbitraryLoads bool true" "$PLIST"
+          echo "✅ ATS 已配置（NSAllowsArbitraryLoads = true）"
+
+          echo "=== 验证 Info.plist 关键配置 ==="
           /usr/libexec/PlistBuddy -c "Print :NSContactsUsageDescription" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Print :NSAppTransportSecurity" "$PLIST"
 
       # ============ 安装 CocoaPods 依赖（Contacts 插件需要）============
       - name: Install CocoaPods dependencies
