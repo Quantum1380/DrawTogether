@@ -1,51 +1,130 @@
-.DS_Store
-node_modules/
-unpackage/
-dist/
+# ============================================================
+# 通用忽略
+# ============================================================
 
-# env files（含敏感信息，不提交）
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ============================================================
+# 依赖 / 构建输出（服务器上重新安装/编译，不提交）
+# ============================================================
+
+# 根目录依赖
+node_modules/
+
+# Taro 构建输出（H5/小程序产物）
+dist/
+unpackage/
+
+# 后端构建输出
+server/dist/
+server/node_modules/
+
+# 管理后台构建输出
+admin/dist/
+admin/node_modules/
+
+# ============================================================
+# 敏感配置（绝对不提交！服务器上单独创建）
+# ============================================================
 .env
 .env.local
 .env.*.local
 server/.env
+admin/.env
 
-# Log files
+# ============================================================
+# 日志
+# ============================================================
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+*.log
 
-# Editor directories and files
+# ============================================================
+# IDE / 编辑器
+# ============================================================
+.idea/
+.vscode/
 .project
-.idea
-.vscode
+.classpath
+*.swp
+*.swo
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
-*.sw*
 
-# Android SDK (本机安装的 Android SDK，不要提交)
-.android-sdk/
-
-
-# Android build outputs
-android/.gradle/
-android/app/build/
-android/build/
-android/local.properties
-
-# IDE / 工具文件
+# ============================================================
+# Trae 等本地工具缓存
+# ============================================================
 .trae/
 .dbg/
 .pai/
 .npm-cache/
+
+# ============================================================
+# Android（Capacitor）
+# ——保留 android/ 下的源文件和配置，只忽略构建输出和本地缓存
+# ============================================================
+
+# 构建输出
+android/.gradle/
+android/app/build/
+android/build/
+android/captures/
+android/app/release/
+android/app/debug/
+
+# 本地配置（每台机器不同，不要提交）
+android/local.properties
+android/.idea/
+android/*.iml
+
+# APK 签名（绝对不要提交！）
+android/app/*.keystore
+android/app/*.jks
+android/app/signing/
+
+# 本机 Android SDK（不要提交）
+.android-sdk/
+
+# ============================================================
+# iOS（Capacitor）
+# ——保留 ios/ 下的源文件和配置（如 Info.plist、工程文件），只忽略构建输出
+# ============================================================
+ios/build/
+ios/App/build/
+ios/Pods/
+ios/**/xcuserdata/
+ios/**/*.xcuserdatad/
+ios/.idea/
+DerivedData/
+*.ipa
+*.xcarchive
+
+# ============================================================
+# Gradle / Maven 缓存
+# ============================================================
 .gradle/
+build/
 
-# 测试文件
+# ============================================================
+# 临时 / 调试文件
+# ============================================================
 test_*.json
-
-# 调试文档
 debug-*.md
+*.tmp
+*.bak
+*.swp
+
+# ============================================================
+# 其他（本项目不使用）
+# ============================================================
 
 # 小程序配置（本项目用 Taro + Capacitor 打 APK，不做小程序）
 project.config.json
