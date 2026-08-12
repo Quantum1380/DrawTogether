@@ -1,0 +1,154 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  position: relative;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.95;
+  }
+}
+
+.playing {
+  opacity: 0.85;
+}
+
+.header {
+  margin-bottom: $spacing-md;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-xs;
+}
+
+.title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+  flex: 1;
+  margin-right: $spacing-sm;
+}
+
+.badge {
+  padding: 4rpx 16rpx;
+  border-radius: $radius-xs;
+  flex-shrink: 0;
+  @include flex-center;
+}
+
+.badgeWaiting {
+  background: $color-bg-primary;
+}
+
+.badgePlaying {
+  background: rgba($color-secondary, 0.1);
+}
+
+.badgeText {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+}
+
+.badgeWaiting .badgeText {
+  color: $color-primary;
+}
+
+.badgePlaying .badgeText {
+  color: $color-secondary;
+}
+
+.roomCode {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.players {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.avatarList {
+  display: flex;
+  align-items: center;
+}
+
+.avatarItem {
+  margin-right: -$spacing-sm;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:nth-child(n+2) {
+    border: 4rpx solid $color-bg-card;
+    border-radius: $radius-round;
+  }
+}
+
+.emptySlot {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+  border: 4rpx solid $color-bg-card;
+  @include flex-center;
+  margin-left: -$spacing-sm;
+}
+
+.plus {
+  font-size: 32rpx;
+  color: $color-text-tertiary;
+  font-weight: $font-weight-bold;
+}
+
+.playerCount {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $spacing-md;
+  border-top: 2rpx solid $color-divider;
+}
+
+.owner {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.rounds {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.fullMask {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba($color-text-primary, 0.5);
+  padding: 8rpx 20rpx;
+  border-top-right-radius: $radius-lg;
+  border-bottom-left-radius: $radius-lg;
+  @include flex-center;
+}
+
+.fullText {
+  font-size: $font-size-xs;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}

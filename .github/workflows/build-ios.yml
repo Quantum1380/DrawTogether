@@ -1,0 +1,81 @@
+name: Build iOS (Unsigned)
+
+# 手动触发，打出未签名 IPA，下载后发给全能签商家签名
+on:
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build H5
+        run: npm run build:h5
+
+      - name: Install Capacitor iOS
+        run: npm install @capacitor/ios
+
+      - name: Add iOS platform
+        run: npx cap add ios
+
+      - name: Configure Info.plist (通讯录权限)
+        run: |
+          PLIST=ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Delete :NSContactsUsageDescription" "$PLIST" 2>/dev/null || true
+          /usr/libexec/PlistBuddy -c "Add :NSContactsUsageDescription string 需要访问通讯录以发现已注册的好友并邀请一起游戏" "$PLIST"
+          echo "=== Info.plist 内容 ==="
+          cat "$PLIST"
+
+      - name: Sync iOS
+        run: npx cap sync ios
+
+      # ============ 编译（不签名）============
+      - name: Build without signing
+        run: |
+          cd ios/App
+          xcodebuild \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build
+
+      # ============ 手动打包成未签名 IPA ============
+      - name: Package unsigned IPA
+        run: |
+          APP_PATH="ios/App/build/Build/Products/Release-iphoneos/App.app"
+          echo "=== 检查 .app 是否存在 ==="
+          ls -la "$APP_PATH"
+
+          # 创建 Payload 目录并复制 .app
+          mkdir Payload
+          cp -r "$APP_PATH" Payload/
+
+          # 压缩成 IPA
+          zip -r drawtogether-unsigned.ipa Payload
+          echo "=== IPA 文件 ==="
+          ls -la drawtogether-unsigned.ipa
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: drawtogether-unsigned-ios
+          path: drawtogether-unsigned.ipa
+          retention-days: 30

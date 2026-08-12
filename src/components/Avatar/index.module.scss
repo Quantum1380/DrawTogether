@@ -1,0 +1,39 @@
+@use '@/styles/variables.scss' as *;
+
+.avatarWrapper {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.avatar {
+  border-radius: $radius-round;
+  overflow: hidden;
+  display: block;
+}
+
+.placeholder {
+  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+  @include flex-center;
+}
+
+.statusDot {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  border-radius: $radius-round;
+  border: 4rpx solid $color-bg-card;
+}
+
+.online {
+  background: $color-online;
+}
+
+.offline {
+  background: $color-offline;
+}
+
+.busy {
+  background: $color-busy;
+}

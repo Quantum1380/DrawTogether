@@ -1,0 +1,271 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 140rpx;
+}
+
+.header {
+  padding: 56rpx 40rpx 32rpx;
+}
+
+.headerTitle {
+  font-size: 52rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  letter-spacing: -1rpx;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.headerDesc {
+  font-size: 28rpx;
+  color: $color-text-secondary;
+  line-height: 1.6;
+  display: block;
+  margin-bottom: 32rpx;
+}
+
+.syncBtn {
+  @include button-reset;
+  height: 96rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-round;
+  font-size: 30rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+  box-shadow: $shadow-glow;
+  transition: all $transition-fast;
+
+  &:active {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+}
+
+.syncBtnDisabled {
+  opacity: 0.6;
+}
+
+.filterTabs {
+  display: flex;
+  padding: 0 40rpx;
+  gap: 12rpx;
+  margin-bottom: 24rpx;
+}
+
+.filterTab {
+  padding: 14rpx 28rpx;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+  transition: all $transition-fast;
+  @include flex-center;
+}
+
+.filterTabActive {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 4rpx 16rpx rgba(99, 102, 241, 0.3);
+}
+
+.filterTabText {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+}
+
+.filterTabTextActive {
+  color: $color-text-white;
+}
+
+.contactList {
+  padding: 0 40rpx;
+}
+
+.loadingWrap {
+  padding: 80rpx 0;
+  @include flex-center;
+}
+
+.loadingText {
+  font-size: 28rpx;
+  color: $color-text-tertiary;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 24rpx;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  margin-bottom: 16rpx;
+  box-shadow: $shadow-card;
+  transition: all $transition-fast;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.contactAvatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: $radius-round;
+  @include flex-center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+}
+
+.contactAvatarText {
+  font-size: 34rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.contactInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.contactName {
+  font-size: 30rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-right: 12rpx;
+}
+
+.registeredTag {
+  padding: 4rpx 14rpx;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+  border-radius: $radius-round;
+  @include flex-center;
+}
+
+.registeredText {
+  font-size: 20rpx;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.contactPhone {
+  font-size: 26rpx;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.addBtn {
+  @include button-reset;
+  padding: 14rpx 32rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-round;
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  text {
+    font-size: 26rpx;
+    color: $color-text-white;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.addedBtn {
+  @include button-reset;
+  padding: 14rpx 32rpx;
+  background: $color-bg-hover;
+  border-radius: $radius-round;
+
+  text {
+    font-size: 26rpx;
+    color: $color-text-tertiary;
+  }
+}
+
+.inviteBtn {
+  @include button-reset;
+  padding: 14rpx 32rpx;
+  background: $color-bg-hover;
+  border-radius: $radius-round;
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  text {
+    font-size: 26rpx;
+    color: $color-text-secondary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+// ============= 新按钮：联系人页面统一 .contactBtn =============
+.contactBtn {
+  @include button-reset;
+  padding: 14rpx 32rpx;
+  border-radius: $radius-round;
+  min-width: 120rpx;
+  text-align: center;
+  transition: all $transition-fast;
+  @include flex-center;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.btnTextWhite {
+  font-size: 26rpx;
+  font-weight: $font-weight-semibold;
+  color: #fff;
+}
+
+.btnTextDisabled {
+  font-size: 26rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-tertiary;
+}
+
+.btnTextApplied {
+  font-size: 26rpx;
+  font-weight: $font-weight-semibold;
+  color: #16a34a;
+}
+
+// 未注册：灰底
+.btnOffline {
+  background: rgba(0, 0, 0, 0.05);
+  border: 2rpx solid $color-border;
+  pointer-events: none;
+}
+
+// 好友：邀请（紫渐变）
+.btnInvite {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 4rpx 16rpx rgba(99, 102, 241, 0.3);
+}
+.btnInviting {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+// 已申请：灰底+绿框
+.btnApplied {
+  background: rgba(34, 197, 94, 0.1);
+  border: 2rpx solid rgba(34, 197, 94, 0.3);
+  pointer-events: none;
+}
+
+// 申请按钮：绿色渐变
+.btnApply {
+  background: linear-gradient(135deg, #10b981 0%, #22c55e 100%);
+  box-shadow: 0 4rpx 16rpx rgba(16, 185, 129, 0.3);
+}
+.btnApplying {
+  opacity: 0.7;
+  pointer-events: none;
+}

@@ -1,0 +1,203 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 140rpx;
+}
+
+.header {
+  padding: 56rpx 40rpx 24rpx;
+}
+
+.pageTitle {
+  font-size: 52rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  letter-spacing: -1rpx;
+  margin-bottom: 28rpx;
+  display: block;
+}
+
+.filterTabs {
+  display: flex;
+  gap: 12rpx;
+  padding: 0 40rpx 24rpx;
+}
+
+.filterTab {
+  padding: 14rpx 28rpx;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+  transition: all $transition-fast;
+  @include flex-center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterTabActive {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 4rpx 16rpx rgba(99, 102, 241, 0.3);
+}
+
+.filterTabText {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.filterTabTextActive {
+  color: $color-text-white;
+}
+
+.messageList {
+  padding: 0 40rpx;
+}
+
+.messageItem {
+  display: flex;
+  align-items: flex-start;
+  padding: 28rpx 24rpx;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  margin-bottom: 16rpx;
+  box-shadow: $shadow-card;
+  transition: all $transition-fast;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.messageAvatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: $radius-round;
+  @include flex-center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.avatarLetter {
+  font-size: 34rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.unreadDot {
+  position: absolute;
+  top: -4rpx;
+  right: -4rpx;
+  width: 20rpx;
+  height: 20rpx;
+  background: $color-error;
+  border-radius: $radius-round;
+  border: 4rpx solid $color-bg-card;
+}
+
+.messageContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.messageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.messageName {
+  font-size: 30rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+  flex: 1;
+  margin-right: 16rpx;
+}
+
+.messageTime {
+  font-size: 22rpx;
+  color: $color-text-tertiary;
+  flex-shrink: 0;
+}
+
+.messagePreview {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  @include text-ellipsis;
+  line-height: 1.5;
+}
+
+.messageUnread .messagePreview {
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.inviteActions {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.inviteBtn {
+  @include button-reset;
+  padding: 12rpx 24rpx;
+  border-radius: $radius-round;
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.inviteBtnAccept {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+}
+
+.inviteBtnReject {
+  background: $color-bg-hover;
+}
+
+.inviteBtnText {
+  font-size: 24rpx;
+  font-weight: $font-weight-medium;
+}
+
+.inviteBtnAccept .inviteBtnText {
+  color: $color-text-white;
+}
+
+.inviteBtnReject .inviteBtnText {
+  color: $color-text-secondary;
+}
+
+.emptyState {
+  padding: 120rpx 0;
+  @include flex-center;
+  flex-direction: column;
+}
+
+.emptyIcon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.6;
+}
+
+.emptyTitle {
+  font-size: 32rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 8rpx;
+}
+
+.emptyDesc {
+  font-size: 26rpx;
+  color: $color-text-tertiary;
+}

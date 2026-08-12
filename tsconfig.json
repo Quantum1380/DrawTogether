@@ -1,37 +1,28 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
-    "jsx": "preserve",
-    "importHelpers": true,
+    "target": "es2017",
+    "module": "commonjs",
+    "removeComments": false,
+    "preserveConstEnums": true,
     "moduleResolution": "node",
-    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
-    "experimentalDecorators":true,
+    "outDir": "lib",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictNullChecks": true,
     "sourceMap": true,
-    "skipLibCheck": true,
-    "baseUrl": ".",
-    "types": [
-      "webpack-env",
-      "@dcloudio/types"
-    ],
+    "baseUrl": "",
+    "rootDir": "",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "typeRoots": ["node_modules/@types"],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
+      "@/*": ["src/*"]
+    }
   },
-  "exclude": [
-    "node_modules",
-    "unpackage",
-    "dist",
-    "src/**/*.nvue"
-  ]
+  "include": ["src", "types"],
+  "compileOnSave": false
 }

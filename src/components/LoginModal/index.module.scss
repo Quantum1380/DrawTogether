@@ -1,0 +1,212 @@
+@use '@/styles/variables.scss' as *;
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 27, 75, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2000;
+  @include flex-center;
+  padding: 40rpx;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  width: 100%;
+  max-width: 640rpx;
+  background: $color-bg-card;
+  border-radius: $radius-2xl;
+  padding: 48rpx 40rpx 40rpx;
+  box-shadow: $shadow-popup;
+  animation: scaleIn 0.25s ease;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.logo {
+  width: 96rpx;
+  height: 96rpx;
+  margin: 0 auto 16rpx;
+  border-radius: $radius-xl;
+  @include gradient-primary;
+  @include flex-center;
+  box-shadow: 0 8rpx 24rpx rgba(99, 102, 241, 0.3);
+}
+
+.logoIcon {
+  font-size: 48rpx;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.subtitle {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  display: block;
+}
+
+.closeBtn {
+  position: absolute;
+  top: -16rpx;
+  right: -16rpx;
+  width: 56rpx;
+  height: 56rpx;
+  @include flex-center;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+
+  &:active {
+    background: $color-bg-page;
+  }
+}
+
+.closeIcon {
+  font-size: 28rpx;
+  color: $color-text-secondary;
+}
+
+.tabs {
+  display: flex;
+  background: $color-bg-page;
+  border-radius: $radius-button;
+  padding: 6rpx;
+  margin-bottom: 32rpx;
+}
+
+.tab {
+  flex: 1;
+  height: 72rpx;
+  @include flex-center;
+  border-radius: $radius-button;
+  transition: all $transition-fast;
+}
+
+.tabActive {
+  background: $color-bg-card;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+.tabText {
+  font-size: 28rpx;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+}
+
+.tabActive .tabText {
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  margin-bottom: 10rpx;
+  margin-left: 8rpx;
+}
+
+.input {
+  width: 100%;
+  height: 88rpx;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-lg;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  color: $color-text-primary;
+  background: $color-bg-page;
+  box-sizing: border-box;
+  transition: border-color $transition-fast;
+
+  &:focus {
+    border-color: $color-primary;
+  }
+}
+
+.errorWrap {
+  padding: 12rpx 16rpx;
+  background: rgba(239, 68, 68, 0.08);
+  border-radius: $radius-md;
+}
+
+.errorText {
+  font-size: 24rpx;
+  color: $color-error;
+}
+
+.submitBtn {
+  @include button-reset;
+  height: 96rpx;
+  @include gradient-primary;
+  border-radius: $radius-button;
+  margin-top: 12rpx;
+  box-shadow: 0 8rpx 24rpx rgba(99, 102, 241, 0.3);
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+.submitBtnDisabled {
+  opacity: 0.6;
+}
+
+.submitBtnText {
+  font-size: 32rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+}
+
+.hintWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  margin-top: 16rpx;
+}
+
+.hintText {
+  font-size: 26rpx;
+  color: $color-text-tertiary;
+}
+
+.switchBtn {
+  font-size: 26rpx;
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+}

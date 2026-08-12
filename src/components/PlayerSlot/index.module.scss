@@ -1,0 +1,157 @@
+@use '@/styles/variables.scss' as *;
+
+.slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 12rpx;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
+  transition: all $transition-fast;
+  border: 2rpx solid transparent;
+  min-height: 240rpx;
+  box-sizing: border-box;
+}
+
+/* 空位：只有空头像 + 文字，整体居中，+ 号往下移到中间 */
+.slotEmpty {
+  justify-content: center;
+}
+
+/* 有玩家：名字在上、头像居中、标签在下，靠 space-between 分布 */
+.slotFilled {
+  justify-content: space-between;
+}
+
+.drawing {
+  border-color: $color-primary;
+  box-shadow: 0 0 0 4rpx rgba(99, 102, 241, 0.15), $shadow-card;
+}
+
+.emptyAvatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+  @include flex-center;
+  margin-bottom: 8rpx;
+  border: 4rpx dashed $color-border;
+  box-sizing: border-box;
+}
+
+.plus {
+  font-size: 36rpx;
+  color: $color-text-tertiary;
+  font-weight: $font-weight-normal;
+}
+
+.emptyText {
+  font-size: 22rpx;
+  color: $color-text-tertiary;
+}
+
+/* 玩家头像容器：和 emptyAvatar 完全一样大（88rpx），
+   圆形、填满、无间隙，确保头像和空座虚线圆视觉上一致 */
+.avatarContainer {
+  position: relative;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: $radius-round;
+  overflow: hidden;
+  margin: 8rpx 0;
+  box-sizing: border-box;
+  background: $color-bg-hover;
+  flex-shrink: 0;
+}
+
+/* 图片直接 100% 填满容器，object-fit: cover 保证不变形；
+   原生 <img> 和 Taro <Image> 都吃这套样式 */
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  border-radius: $radius-round;
+  object-fit: cover;
+  display: block;
+}
+
+/* 无头像时的兜底：渐变背景 + 首字母 */
+.avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+  @include flex-center;
+}
+
+.avatarInitial {
+  font-size: 36rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}
+
+/* 状态文字：纯文字，不带背景标签 */
+.statusText {
+  font-size: 20rpx;
+  font-weight: $font-weight-medium;
+}
+
+.readyText {
+  color: $color-success;
+}
+
+.unreadyText {
+  color: $color-text-tertiary;
+}
+
+/* 房主标签：左上角横椭圆形状，文字居中 */
+.ownerTag {
+  position: absolute;
+  top: 6rpx;
+  left: 6rpx;
+  padding: 4rpx 14rpx;
+  background: linear-gradient(135deg, $color-warning 0%, #FBBF24 100%);
+  border-radius: 999rpx;
+  z-index: 5;
+  line-height: 1;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ownerText {
+  font-size: 22rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+  line-height: 1;
+}
+
+.drawerTag {
+  position: absolute;
+  bottom: -6rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2rpx 12rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-round;
+  z-index: 2;
+  @include flex-center;
+}
+
+.drawerText {
+  font-size: 16rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+}
+
+.name {
+  font-size: 24rpx;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  max-width: 100%;
+  @include text-ellipsis;
+  text-align: center;
+  line-height: 1.2;
+}

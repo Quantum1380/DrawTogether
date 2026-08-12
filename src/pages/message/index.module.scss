@@ -1,0 +1,224 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.filterTabs {
+  display: flex;
+  padding: $spacing-sm $spacing-lg;
+  background: $color-bg-card;
+  gap: $spacing-sm;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.filterTab {
+  padding: 20rpx 44rpx;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+  transition: all $transition-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72rpx;
+}
+
+.filterTabActive {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+}
+
+.filterTabText {
+  font-size: 30rpx;
+  color: $color-text-secondary;
+  font-weight: $font-weight-semibold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.filterTabTextActive {
+  color: $color-text-white;
+}
+
+.messageList {
+  padding: $spacing-md $spacing-lg;
+}
+
+.loadingWrap {
+  padding: $spacing-xl;
+  @include flex-center;
+}
+
+.loadingText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.messageItem {
+  display: flex;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-sm;
+  box-shadow: $shadow-card;
+  position: relative;
+  transition: all $transition-base;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.unread {
+  border-left: 6rpx solid $color-primary;
+}
+
+.messageAvatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+  @include flex-center;
+  flex-shrink: 0;
+  margin-right: $spacing-md;
+}
+
+.messageAvatarText {
+  font-size: 40rpx;
+}
+
+.realAvatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: $radius-round;
+  @include flex-center;
+}
+
+.avatarText {
+  font-size: 38rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+}
+
+.filterBadge {
+  display: inline-block;
+  margin-left: 10rpx;
+  min-width: 36rpx;
+  height: 36rpx;
+  padding: 0 10rpx;
+  line-height: 36rpx;
+  border-radius: $radius-round;
+  background: rgba(0, 0, 0, 0.1);
+  color: $color-text-secondary;
+  font-size: 22rpx;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.filterBadgeActive {
+  background: rgba(255, 255, 255, 0.25);
+  color: $color-text-white;
+}
+
+.scrollView {
+  max-height: calc(100vh - 280rpx);
+}
+
+.messageContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.messageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4rpx;
+}
+
+.messageFrom {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  @include text-ellipsis;
+  flex: 1;
+}
+
+.messageTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  flex-shrink: 0;
+  margin-left: $spacing-sm;
+}
+
+.messageText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+  @include text-ellipsis-multi(2);
+}
+
+.messageActions {
+  display: flex;
+  gap: $spacing-sm;
+  margin-top: $spacing-sm;
+}
+
+.acceptBtn {
+  @include button-reset;
+  height: $button-height-sm;
+  min-width: 140rpx;
+  padding: 0 $spacing-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.rejectBtn {
+  @include button-reset;
+  height: $button-height-sm;
+  min-width: 140rpx;
+  padding: 0 $spacing-lg;
+  background: $color-bg-hover;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.acceptedTag {
+  display: inline-block;
+  padding: 4rpx $spacing-md;
+  background: rgba($color-success, 0.1);
+  border-radius: $radius-button;
+  margin-top: $spacing-xs;
+}
+
+.acceptedText {
+  font-size: $font-size-xs;
+  color: $color-success;
+  font-weight: $font-weight-medium;
+}
+
+.unreadDot {
+  position: absolute;
+  top: $spacing-md;
+  right: $spacing-md;
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+  background: $color-error;
+}

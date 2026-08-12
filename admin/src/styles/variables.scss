@@ -1,0 +1,113 @@
+// ============================================
+// 管理后台主题变量 - 复用主程序 Indigo/Violet 主题
+// ============================================
+
+// 品牌主题色
+$color-primary: #6366f1;
+$color-primary-light: #818cf8;
+$color-primary-dark: #4f46e5;
+
+// 辅助色
+$color-secondary: #a78bfa;
+$color-accent: #f472b6;
+
+// 功能色
+$color-success: #10b981;
+$color-warning: #f59e0b;
+$color-error: #ef4444;
+$color-info: #3b82f6;
+
+// 背景色
+$color-bg-page: #f8f7fc;
+$color-bg-card: #ffffff;
+$color-bg-hover: #f1f0f7;
+$color-bg-primary: #eef0ff;
+$color-bg-secondary: #f4f3ff;
+
+// 文本色
+$color-text-primary: #1e1b4b;
+$color-text-secondary: #4b5563;
+$color-text-tertiary: #9ca3af;
+$color-text-disabled: #d1d5db;
+$color-text-white: #ffffff;
+
+// 边框色
+$color-border: #e5e7eb;
+$color-border-light: #f3f4f6;
+$color-divider: #f3f4f6;
+
+// 状态色
+$color-online: #10b981;
+$color-offline: #d1d5db;
+$color-banned: #ef4444;
+
+// 圆角(px)
+$radius-xs: 4px;
+$radius-sm: 6px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-2xl: 20px;
+$radius-round: 999px;
+
+// 阴影
+$shadow-card: 0 1px 8px rgba(99, 102, 241, 0.06);
+$shadow-card-hover: 0 4px 16px rgba(99, 102, 241, 0.12);
+$shadow-float: 0 2px 12px rgba(30, 27, 75, 0.08);
+$shadow-popup: 0 8px 24px rgba(30, 27, 75, 0.18);
+$shadow-glow: 0 0 16px rgba(99, 102, 241, 0.25);
+
+// 字体大小
+$font-size-xs: 12px;
+$font-size-sm: 13px;
+$font-size-md: 14px;
+$font-size-lg: 16px;
+$font-size-xl: 20px;
+$font-size-xxl: 28px;
+
+// 字重
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// 过渡
+$transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+// 布局
+$layout-header-height: 56px;
+$layout-sidebar-width: 220px;
+$layout-content-padding: 24px;
+
+// Mixin
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin gradient-primary {
+  background: linear-gradient(
+    135deg,
+    $color-primary 0%,
+    $color-primary-light 100%
+  );
+}
+
+@mixin gradient-hero {
+  background: linear-gradient(145deg, #4f46e5 0%, #6366f1 40%, #8b5cf6 100%);
+}
+
+@mixin card-base {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+}
+
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

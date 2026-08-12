@@ -1,0 +1,90 @@
+@use '@/styles/variables.scss' as *;
+
+.item {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-sm;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.info {
+  flex: 1;
+  margin-left: $spacing-md;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4rpx;
+}
+
+.name {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  @include text-ellipsis;
+  flex: 1;
+}
+
+.statusText {
+  font-size: $font-size-xs;
+  margin-left: $spacing-sm;
+  flex-shrink: 0;
+}
+
+.online {
+  color: $color-online;
+}
+
+.offline {
+  color: $color-offline;
+}
+
+.busy {
+  color: $color-busy;
+}
+
+.stats {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  @include text-ellipsis;
+}
+
+.inviteBtn {
+  @include button-reset;
+  height: $button-height-sm;
+  min-width: 120rpx;
+  padding: 0 $spacing-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+  flex-shrink: 0;
+
+  &:active {
+    opacity: 0.85;
+    transform: scale(0.96);
+  }
+}
+
+.busyTag {
+  padding: 8rpx 20rpx;
+  background: $color-bg-hover;
+  border-radius: $radius-button;
+  flex-shrink: 0;
+}
+
+.busyText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}

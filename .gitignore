@@ -3,9 +3,11 @@ node_modules/
 unpackage/
 dist/
 
-# local env files
+# env files（含敏感信息，不提交）
+.env
 .env.local
 .env.*.local
+server/.env
 
 # Log files
 npm-debug.log*
@@ -21,3 +23,33 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+# Android SDK (本机安装的 Android SDK，不要提交)
+.android-sdk/
+
+
+# Android build outputs
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+
+# IDE / 工具文件
+.trae/
+.dbg/
+.pai/
+.npm-cache/
+.gradle/
+
+# 测试文件
+test_*.json
+
+# 调试文档
+debug-*.md
+
+# 小程序配置（本项目用 Taro + Capacitor 打 APK，不做小程序）
+project.config.json
+project.tt.json
+
+# 云函数（本项目用独立后端 server/，不用云函数）
+cloudfunctions/

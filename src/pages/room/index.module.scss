@@ -1,0 +1,466 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 200rpx;
+}
+
+.roomHeader {
+  background: linear-gradient(145deg, #4F46E5 0%, #6366F1 50%, #8B5CF6 100%);
+  padding: 56rpx 40rpx 48rpx;
+  color: $color-text-white;
+  position: relative;
+  overflow: hidden;
+}
+
+.roomHeader::before {
+  content: '';
+  position: absolute;
+  width: 400rpx;
+  height: 400rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: $radius-round;
+  top: -200rpx;
+  right: -120rpx;
+}
+
+.roomNameRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.roomName {
+  font-size: 44rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  @include text-ellipsis;
+  flex: 1;
+}
+
+.roomNameRight {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  flex-shrink: 0;
+}
+
+.settingsGear {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: $radius-round;
+  background: rgba(255, 255, 255, 0.15);
+  @include flex-center;
+  transition: all $transition-fast;
+  &:active {
+    transform: rotate(45deg) scale(0.9);
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+.settingsGearText {
+  font-size: 30rpx;
+}
+
+.roomStatus {
+  padding: 8rpx 24rpx;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: $radius-round;
+  @include flex-center;
+}
+
+.roomStatusText {
+  font-size: 24rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}
+
+.roomCodeCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: $radius-lg;
+  padding: 24rpx 28rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.roomCodeLabel {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  display: block;
+}
+
+.roomCodeValue {
+  font-size: 40rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  letter-spacing: 8rpx;
+  display: block;
+  margin-top: 4rpx;
+}
+
+.copyBtn {
+  @include button-reset;
+  padding: 12rpx 28rpx;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: $radius-round;
+  transition: all $transition-fast;
+
+  &:active {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(0.95);
+  }
+}
+
+.copyBtnText {
+  font-size: 24rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}
+
+.sectionTitle {
+  font-size: 32rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  padding: 40rpx 40rpx 20rpx;
+  display: block;
+}
+
+.playerGrid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 40rpx;
+  gap: 20rpx;
+}
+
+.playerSlot {
+  width: calc(33.33% - 14rpx);
+}
+
+.gameInfo {
+  margin: 32rpx 40rpx;
+  padding: 32rpx;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.infoLabel {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+}
+
+.infoValue {
+  font-size: 26rpx;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 20rpx;
+  padding: 24rpx 40rpx;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  background: $color-bg-card;
+  box-shadow: $shadow-float;
+  z-index: 100;
+}
+
+.inviteBtn {
+  @include button-reset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 96rpx;
+  width: 220rpx;
+  background: $color-bg-hover;
+  border-radius: $radius-round;
+  flex-shrink: 0;
+  transition: all $transition-fast;
+
+  &:active {
+    opacity: 0.7;
+    transform: scale(0.97);
+  }
+}
+
+.leaveBtn {
+  @include button-reset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 96rpx;
+  width: 140rpx;
+  background: transparent;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-round;
+  flex-shrink: 0;
+  transition: all $transition-fast;
+
+  &:active {
+    opacity: 0.7;
+    transform: scale(0.97);
+  }
+}
+
+.leaveBtnText {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+}
+
+.inviteBtnText {
+  font-size: 28rpx;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+}
+
+.startBtn {
+  @include button-reset;
+  flex: 1;
+  height: 96rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-round;
+  font-size: 30rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+  box-shadow: $shadow-glow;
+  transition: all $transition-fast;
+
+  &:active {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+}
+
+.readyBtn {
+  @include button-reset;
+  flex: 1;
+  height: 96rpx;
+  background: linear-gradient(135deg, $color-success 0%, #34D399 100%);
+  border-radius: $radius-round;
+  font-size: 30rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+  box-shadow: $shadow-success;
+  transition: all $transition-fast;
+
+  &:active {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+}
+
+.startBtnDisabled {
+  background: $color-bg-hover;
+  color: $color-text-tertiary;
+  box-shadow: none;
+}
+
+.loadingWrap {
+  padding: 80rpx;
+  @include flex-center;
+}
+
+.loadingText {
+  font-size: 28rpx;
+  color: $color-text-tertiary;
+}
+
+.wordHint {
+  margin: 0 40rpx;
+  padding: 28rpx 32rpx;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(167, 139, 250, 0.08) 100%);
+  border-radius: $radius-lg;
+  border-left: 6rpx solid $color-primary;
+}
+
+.wordHintText {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+// ====== 房间设置弹窗 ======
+.modalMask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 999;
+  @include flex-center;
+}
+
+.modalCard {
+  width: 86%;
+  max-width: 680rpx;
+  background: #fff;
+  border-radius: $radius-xl;
+  padding: 40rpx 36rpx 32rpx;
+  box-shadow: 0 20rpx 60rpx rgba(0,0,0,0.3);
+}
+
+.modalTitle {
+  font-size: 36rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+
+.modalText {
+  display: block;
+  font-size: 28rpx;
+  color: $color-text-secondary;
+  line-height: 1.6;
+  text-align: center;
+  padding: 0 16rpx;
+}
+
+.leaveModalCard {
+  width: 80%;
+  max-width: 580rpx;
+}
+
+.modalField {
+  margin-bottom: 28rpx;
+}
+
+.modalFieldLabel {
+  font-size: 28rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.modalInput {
+  width: 100%;
+  height: 80rpx;
+  border-radius: $radius-md;
+  background: $color-bg-hover;
+  border: 2rpx solid $color-border;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+.optionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.optionChip {
+  padding: 14rpx 28rpx;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+  border: 2rpx solid $color-border;
+  transition: all $transition-fast;
+  &:active {
+    transform: scale(0.95);
+  }
+}
+.optionChipActive {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-color: transparent;
+  box-shadow: 0 4rpx 12rpx rgba(99, 102, 241, 0.3);
+}
+.optionChipDisabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.optionChipText {
+  font-size: 26rpx;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+}
+.optionChipTextActive {
+  font-size: 26rpx;
+  color: #fff;
+  font-weight: $font-weight-semibold;
+}
+.optionChipTextDisabled {
+  color: $color-text-tertiary;
+}
+
+.modalHint {
+  display: block;
+  font-size: 22rpx;
+  color: $color-text-tertiary;
+  margin-top: 12rpx;
+}
+
+.modalActions {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 36rpx;
+}
+
+.modalBtn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: $radius-lg;
+  @include flex-center;
+  transition: all $transition-fast;
+  &:active {
+    transform: scale(0.97);
+  }
+}
+.modalBtnCancel {
+  background: $color-bg-hover;
+  border: 2rpx solid $color-border;
+}
+.modalBtnCancelText {
+  font-size: 30rpx;
+  color: $color-text-secondary;
+  font-weight: $font-weight-semibold;
+}
+.modalBtnConfirm {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 8rpx 24rpx rgba(99, 102, 241, 0.35);
+}
+
+.modalBtnDanger {
+  background: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+  box-shadow: 0 8rpx 24rpx rgba(239, 68, 68, 0.35);
+}
+.modalBtnConfirmText {
+  font-size: 30rpx;
+  color: #fff;
+  font-weight: $font-weight-semibold;
+}
+.modalBtnDisabled {
+  opacity: 0.6;
+  pointer-events: none;
+}

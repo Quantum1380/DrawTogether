@@ -1,0 +1,170 @@
+@use '@/styles/variables.scss' as *;
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal {
+  width: 100%;
+  max-width: $max-content-width + $page-padding * 2;
+  background: $color-bg-card;
+  border-radius: $radius-xl $radius-xl 0 0;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: $spacing-lg;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.roomCode {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.closeBtn {
+  position: absolute;
+  top: $spacing-lg;
+  right: $spacing-lg;
+  width: 56rpx;
+  height: 56rpx;
+  @include flex-center;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+}
+
+.closeIcon {
+  font-size: 28rpx;
+  color: $color-text-secondary;
+}
+
+.searchBar {
+  padding: $spacing-md $spacing-lg;
+}
+
+.searchInput {
+  width: 100%;
+  height: 72rpx;
+  background: $color-bg-hover;
+  border-radius: $radius-button;
+  padding: 0 $spacing-lg;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+}
+
+.friendList {
+  flex: 1;
+  padding: 0 $spacing-lg $spacing-lg;
+  max-height: 600rpx;
+}
+
+.loadingWrap {
+  padding: $spacing-xl;
+  @include flex-center;
+}
+
+.loadingText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.friendRow {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm 0;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.friendInfo {
+  flex: 1;
+  margin-left: $spacing-md;
+  min-width: 0;
+}
+
+.friendName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  display: block;
+  @include text-ellipsis;
+}
+
+.friendStatus {
+  font-size: $font-size-xs;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.online {
+  color: $color-online;
+}
+
+.offline {
+  color: $color-offline;
+}
+
+.busyStatus {
+  color: $color-busy;
+}
+
+.inviteBtn {
+  @include button-reset;
+  height: $button-height-sm;
+  min-width: 120rpx;
+  padding: 0 $spacing-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  flex-shrink: 0;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.inviteBtnText {
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}
+
+.disabled {
+  background: $color-bg-hover;
+  opacity: 0.6;
+}
+
+.disabled .inviteBtnText {
+  color: $color-text-tertiary;
+}
