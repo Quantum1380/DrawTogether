@@ -100,20 +100,16 @@ jobs:
       - name: Build without signing
         run: |
           cd ios/App
-          # 列出可用 scheme
+          # 列出可用 scheme（确认存在）
           echo "=== 可用 Schemes ==="
           xcodebuild -workspace App.xcworkspace -list
 
-          # 动态获取第一个 scheme（通常是 App）
-          SCHEME=$(xcodebuild -workspace App.xcworkspace -list 2>/dev/null | grep -A 20 "Schemes:" | grep -E "^\s+\S" | head -1 | xargs)
-          if [ -z "$SCHEME" ]; then
-            SCHEME="App"
-          fi
-          echo "=== 使用 Scheme: $SCHEME ==="
+          # Capacitor 项目 scheme 固定为 "App"，不动态解析（避免 grep 把标题当 scheme）
+          echo "=== 使用 Scheme: App ==="
 
           xcodebuild \
             -workspace App.xcworkspace \
-            -scheme "$SCHEME" \
+            -scheme App \
             -configuration Release \
             -sdk iphoneos \
             -derivedDataPath build \
