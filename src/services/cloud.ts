@@ -15,9 +15,12 @@ const isRn = process.env.TARO_ENV === 'rn';
 //   必须用绝对公网地址，不能再走 /api 相对路径
 // - 小程序 / RN（安卓/iOS App）：必须填真实公网地址
 // ============================================================
-// ⚠️ 打 APK 前必改：填你的后端公网地址（cpolar 映射到本地 3000 端口）
-// 必须用 https，Android 9+ 默认禁止明文 http 流量（Cleartext HTTP traffic not permitted）
-const PUBLIC_SERVER = 'https://75d7eb5a.r5.cpolar.top';
+// ⚠️ 打 APK 前必改：填你的后端真实公网地址
+// - 有域名 + 配了 SSL：用 https:// 前缀（推荐）
+// - 当前阶段只用服务器公网 IP：用 http://，
+//   AndroidManifest.xml 已配置 usesCleartextTraffic=true 兜底；
+//   APK 的 CapacitorHttp 原生请求也不会受 WebView 明文限制
+const PUBLIC_SERVER = 'http://45.61.170.36';
 
 // H5 生产模式（NODE_ENV=production，比如 cap copy 内置到 APK）也要走绝对地址
 const isH5Prod = isH5 && process.env.NODE_ENV === 'production';
