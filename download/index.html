@@ -2,210 +2,672 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1E1B4B" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Draw Together - Download</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --purple-900: #1E1B4B;
+      --purple-800: #312E81;
+      --purple-700: #4338CA;
+      --purple-600: #4F46E5;
+      --purple-500: #6366F1;
+      --purple-400: #818CF8;
+      --accent-pink: #F472B6;
+      --accent-yellow: #FBBF24;
+      --accent-green: #10B981;
+      --accent-cyan: #22D3EE;
+      --text-muted: #C7D2FE;
     }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(180deg, #1E1B4B 0%, #312E81 40%, #4338CA 100%);
+      color: #fff;
       min-height: 100vh;
-      background: linear-gradient(145deg, #4F46E5 0%, #6366F1 40%, #8B5CF6 100%);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== NAV ===== */
+    .nav {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 20px;
-      color: #1E1B4B;
+      justify-content: space-between;
+      padding: 14px 18px;
+      position: sticky;
+      top: 0;
+      background: rgba(30, 27, 75, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 100;
     }
-
-    .container {
-      width: 100%;
-      max-width: 480px;
-    }
-
-    .card {
-      background: #FFFFFF;
-      border-radius: 24px;
-      padding: 48px 36px;
-      box-shadow: 0 20px 60px rgba(30, 27, 75, 0.3);
-      text-align: center;
-    }
-
-    .app-icon {
-      width: 96px;
-      height: 96px;
-      margin: 0 auto 24px;
-      border-radius: 22px;
-      background: linear-gradient(135deg, #6366F1 0%, #818CF8 100%);
+    .nav-brand {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
-    }
-
-    .app-name {
-      font-size: 28px;
+      gap: 8px;
+      font-size: 16px;
       font-weight: 700;
-      color: #1E1B4B;
-      margin-bottom: 8px;
     }
-
-    .app-tagline {
-      font-size: 15px;
-      color: #9CA3AF;
-      margin-bottom: 32px;
-    }
-
-    .features {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 36px;
-      text-align: left;
-    }
-
-    .feature {
+    .nav-brand .icon { font-size: 24px; }
+    .nav-lang {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      background: #F8F7FC;
-      border-radius: 12px;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.15);
     }
 
-    .feature-icon {
-      font-size: 20px;
-      flex-shrink: 0;
+    /* ===== HERO ===== */
+    .hero {
+      text-align: center;
+      padding: 32px 20px 28px;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20px; left: 50%;
+      transform: translateX(-50%);
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(244,114,182,0.2) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .hero-badge .dot {
+      width: 5px; height: 5px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
     }
 
-    .feature-text {
-      font-size: 14px;
-      color: #4B5563;
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #FFFFFF 0%, #C7D2FE 50%, #F472B6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero h1 .highlight {
+      display: block;
+      background: linear-gradient(135deg, #FBBF24 0%, #F472B6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero .tagline {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 320px;
+      margin: 0 auto 28px;
+      line-height: 1.5;
     }
 
-    .download-section {
+    /* ===== APP ICON ===== */
+    .app-icon-wrap {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
+      justify-content: center;
+      margin-bottom: 20px;
     }
-
-    .btn {
+    .app-icon {
+      width: 88px;
+      height: 88px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 16px 24px;
-      border-radius: 14px;
+      font-size: 44px;
+      box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5);
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+
+    /* ===== DOWNLOAD BUTTONS ===== */
+    .download-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+      padding: 0 16px;
+    }
+    .btn-download {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-radius: 16px;
       font-size: 16px;
       font-weight: 600;
       text-decoration: none;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      transition: transform 0.15s, box-shadow 0.15s;
       cursor: pointer;
       border: none;
+      width: 100%;
     }
-
-    .btn:active {
-      transform: scale(0.98);
-    }
+    .btn-download:active { transform: scale(0.97); }
 
     .btn-android {
       background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-      color: #FFFFFF;
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
     }
-
-    .btn-android:hover {
-      box-shadow: 0 8px 28px rgba(16, 185, 129, 0.5);
-    }
-
     .btn-ios {
-      background: #F1F0F7;
-      color: #9CA3AF;
+      background: rgba(255,255,255,0.1);
+      color: var(--text-muted);
+      border: 1px solid rgba(255,255,255,0.15);
       cursor: not-allowed;
     }
+    .btn-download .btn-icon { font-size: 26px; }
+    .btn-download .btn-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.2;
+    }
+    .btn-download .btn-text small {
+      font-size: 11px;
+      opacity: 0.85;
+      font-weight: 500;
+    }
 
-    .btn-icon {
+    /* ===== QR CODE ===== */
+    .qr-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+    .qr-box {
+      width: 96px;
+      height: 96px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    .qr-box svg { width: 100%; height: 100%; }
+    .qr-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ===== SECTION TITLE ===== */
+    .section-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding: 0 20px;
+    }
+    .section-title .emoji { margin-right: 6px; }
+
+    /* ===== FEATURES ===== */
+    .features {
+      padding: 32px 16px;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .feature-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 18px 12px;
+      text-align: center;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .feature-card:active {
+      transform: scale(0.97);
+      background: rgba(255,255,255,0.12);
+    }
+    .feature-icon {
+      width: 44px; height: 44px;
+      margin: 0 auto 10px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 22px;
     }
+    .feature-icon.c1 { background: linear-gradient(135deg, #6366F1, #818CF8); }
+    .feature-icon.c2 { background: linear-gradient(135deg, #F472B6, #FB7185); }
+    .feature-icon.c3 { background: linear-gradient(135deg, #FBBF24, #F59E0B); }
+    .feature-icon.c4 { background: linear-gradient(135deg, #10B981, #059669); }
+    .feature-icon.c5 { background: linear-gradient(135deg, #22D3EE, #06B6D4); }
+    .feature-icon.c6 { background: linear-gradient(135deg, #A78BFA, #8B5CF6); }
 
-    .version-info {
-      margin-top: 24px;
-      font-size: 12px;
-      color: #9CA3AF;
-    }
-
-    .version-info span {
-      margin: 0 6px;
-    }
-
-    .divider {
-      height: 1px;
-      background: #F3F4F6;
-      margin: 28px 0;
-    }
-
-    .scan-hint {
-      margin-top: 16px;
+    .feature-card h3 {
       font-size: 13px;
-      color: #9CA3AF;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+    .feature-card p {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* ===== SCREENSHOTS ===== */
+    .screenshots {
+      padding: 32px 0 40px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+    }
+    .screenshots::-webkit-scrollbar { display: none; }
+    .screenshots-scroll {
+      display: flex;
+      gap: 16px;
+      padding: 0 16px;
+      width: max-content;
+    }
+    .phone {
+      width: 200px;
+      height: 380px;
+      flex-shrink: 0;
+      background: linear-gradient(160deg, #312E81 0%, #1E1B4B 100%);
+      border-radius: 32px;
+      border: 3px solid rgba(255,255,255,0.15);
+      padding: 10px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+      scroll-snap-align: center;
+    }
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .phone-header {
+      padding: 12px 10px 8px;
+      font-size: 10px;
+      color: rgba(255,255,255,0.7);
+      display: flex;
+      justify-content: space-between;
+    }
+    .phone-body {
+      flex: 1;
+      padding: 6px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .phone-footer {
+      padding: 6px;
+      display: flex;
+      gap: 4px;
+      justify-content: space-around;
+      background: rgba(0,0,0,0.2);
+    }
+    .phone-footer span {
+      width: 28px; height: 20px;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* Phone 1 - Room list */
+    .phone-1 .phone-screen { background: linear-gradient(180deg, #4F46E5 0%, #312E81 100%); }
+    .room-card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 10px;
+    }
+    .room-code {
+      font-weight: 700;
+      color: #FBBF24;
+    }
+    .room-players {
+      display: flex;
+      gap: 2px;
+      margin-top: 4px;
+    }
+    .room-players .avatar {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: #818CF8;
+      font-size: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+    .btn-start {
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: #fff;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    /* Phone 2 - Canvas */
+    .phone-2 .phone-screen { background: linear-gradient(180deg, #1E1B4B 0%, #312E81 100%); }
+    .game-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: #FBBF24;
+      font-weight: 600;
+    }
+    .canvas-area {
+      flex: 1;
+      background: #fff;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .canvas-area svg { width: 100%; height: 100%; }
+    .word-badge {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(30,27,75,0.85);
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 9px;
+      font-weight: 600;
+    }
+    .color-palette {
+      display: flex;
+      gap: 3px;
+      justify-content: center;
+      padding: 4px;
+    }
+    .color-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.3);
+    }
+
+    /* Phone 3 - Chat */
+    .phone-3 .phone-screen { background: linear-gradient(180deg, #4F46E5 0%, #312E81 100%); }
+    .chat-msg {
+      background: rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 9px;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-msg .check { color: var(--accent-green); }
+    .chat-msg .cross { color: var(--accent-pink); }
+    .score-tag {
+      background: linear-gradient(135deg, #FBBF24, #F59E0B);
+      color: #1E1B4B;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 8px;
+      font-weight: 700;
+    }
+
+    /* ===== STICKY BOTTOM CTA ===== */
+    .cta-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(30, 27, 75, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 12px 16px;
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+      z-index: 50;
+    }
+    .cta-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.15s;
+    }
+    .cta-btn:active { transform: scale(0.97); }
+    .cta-btn-android {
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 32px 20px 100px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+    .footer .social {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .footer .social a {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      text-decoration: none;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      font-size: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .footer-copy {
+      font-size: 11px;
+      opacity: 0.6;
+    }
+
+    /* ===== SWIPE HINT ===== */
+    .swipe-hint {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      opacity: 0.7;
+    }
+
+    /* ===== STATS BAR ===== */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding: 0 20px 32px;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-num {
+      font-size: 20px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FBBF24 0%, #F472B6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="card">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="icon">🎨</span>
+      <span>Draw Together</span>
+    </div>
+    <div class="nav-lang">
+      <span>🌐</span>
+      <span>EN</span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="app-icon-wrap">
       <div class="app-icon">🎨</div>
-      <h1 class="app-name">Draw Together</h1>
-      <p class="app-tagline">Draw & Guess with friends, anytime, anywhere</p>
+    </div>
+    <div class="hero-badge">
+      <span class="dot"></span>
+      <span>v1.0.0 · Now Available</span>
+    </div>
+    <h1>Draw Together<span class="highlight">Draw & Guess!</span></h1>
+    <p class="tagline">Draw fast, guess faster, and have fun with friends — anytime, anywhere!</p>
+  </section>
 
-      <div class="features">
-        <div class="feature">
-          <span class="feature-icon">✏️</span>
-          <span class="feature-text">Real-time drawing canvas</span>
-        </div>
-        <div class="feature">
-          <span class="feature-icon">👥</span>
-          <span class="feature-text">Multiplayer rooms with friends</span>
-        </div>
-        <div class="feature">
-          <span class="feature-icon">📱</span>
-          <span class="feature-text">Sync your contacts to find friends</span>
-        </div>
-        <div class="feature">
-          <span class="feature-icon">💬</span>
-          <span class="feature-text">Live chat & guessing</span>
-        </div>
-      </div>
+  <!-- DOWNLOAD BUTTONS -->
+  <div class="download-row">
+    <a href="/apk/app-debug.apk" class="btn-download btn-android" download>
+      <span class="btn-icon">🤖</span>
+      <span class="btn-text">
+        <small>Get it on</small>
+        <span>Android</span>
+      </span>
+    </a>
+    <button class="btn-download btn-ios" disabled>
+      <span class="btn-icon"></span>
+      <span class="btn-text">
+        <small>Coming soon</small>
+        <span>iOS</span>
+      </span>
+    </button>
+  </div>
 
-      <div class="download-section">
-        <!-- TODO: Replace with your actual APK URL -->
-        <a href="/apk/draw-together.apk" class="btn btn-android" download>
-          <span class="btn-icon">📱</span>
-          Download for Android
-        </a>
-        <button class="btn btn-ios" disabled>
-          <span class="btn-icon"></span>
-          iOS - Coming Soon
-        </button>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="version-info">
-        <span>Version 1.0.0</span>
-        <span>·</span>
-        <span>Updated: 2026-08-13</span>
-        <span>·</span>
-        <span>Android 5.0+</span>
-      </div>
-
-      <p class="scan-hint">Tap the button above to download and install</p>
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">10K+</div>
+      <div class="stat-label">Downloads</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4.8★</div>
+      <div class="stat-label">Rating</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">88+</div>
+      <div class="stat-label">Words</div>
     </div>
   </div>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <h2 class="section-title">Why Draw Together?</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon c1">🎨</div>
+        <h3>Real-time Drawing</h3>
+        <p>Smooth canvas with colors & brushes</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon c2">🎯</div>
+        <h3>Live Guessing</h3>
+        <p>Guess fast, score big!</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon c3">📖</div>
+        <h3>Fun Word Packs</h3>
+        <p>Tons of exciting categories</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon c4">👥</div>
+        <h3>Play with Friends</h3>
+        <p>Invite friends to your room</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon c5">📱</div>
+        <h3>Sync Contacts</h3>
+        <p>Find friends instantly</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon c6">🏆</div>
+        <h3>Easy & Fun</h3>
+        <p>Simple to learn, fun to play</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="social">
+      <a href="#" title="Twitter">🐦</a>
+      <a href="#" title="Instagram">📷</a>
+      <a href="#" title="TikTok">🎵</a>
+      <a href="#" title="YouTube">📺</a>
+    </div>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Draw Together. All rights reserved.</div>
+  </footer>
+
+  <!-- STICKY BOTTOM CTA -->
+  <div class="cta-bar">
+    <a href="/apk/Draw Together.apk" class="cta-btn cta-btn-android" download>
+      <span>🤖</span> Download for Android
+    </a>
+  </div>
+
 </body>
 </html>
