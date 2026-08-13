@@ -10,8 +10,6 @@ import type { Contact } from '@/types/user';
 import EmptyState from '@/components/EmptyState';
 import styles from './index.module.scss';
 
-type FilterType = 'all' | 'registered' | 'unregistered';
-
 /**
  * 通讯录联系人状态 status:
  * - not_registered：未注册
@@ -31,7 +29,6 @@ const ContactsPage: React.FC = () => {
   const [contacts, setContacts] = useState<EnrichedContact[]>([]);
   const [loading, setLoading] = useState(false);
   const [synced, setSynced] = useState(false);
-  const [filter, setFilter] = useState<FilterType>('all');
 
   // 操作状态：申请中 / 邀请创建房间中
   const [applyingSet, setApplyingSet] = useState<Set<string>>(new Set());
@@ -174,13 +171,7 @@ const ContactsPage: React.FC = () => {
     }
   };
 
-  const filteredContacts = useMemo(() => contacts.filter((c) => {
-    if (filter === 'all') return true;
-    if (filter === 'registered') return c.registered;
-    return !c.registered;
-  }), [contacts, filter]);
-
-  const registeredCount = useMemo(() => contacts.filter(c => c.registered).length, [contacts]);
+  const filteredContacts = useMemo(() => contacts.filter(c => c.registered), [contacts]);
 
   const getAvatarColor = (nickname: string) => {
     const colors = [
@@ -202,13 +193,6 @@ const ContactsPage: React.FC = () => {
    *  - 已注册 + 未申请（status=not_friend）→「申请」
    */
   const renderButton = (c: EnrichedContact, key: string) => {
-    if (!c.registered || c.status === 'not_registered') {
-      return (
-        <View className={classnames(styles.contactBtn, styles.btnOffline)}>
-          <Text className={styles.btnTextDisabled}>Not Registered</Text>
-        </View>
-      );
-    }
     if (c.status === 'friend') {
       const inv = invitingSet.has(c.openid);
       if (!c.isOnline) {
@@ -266,30 +250,6 @@ const ContactsPage: React.FC = () => {
 
       {synced && (
         <>
-          {/* 筛选标签 */}
-          <View className={styles.filterTabs}>
-            {(['all', 'registered', 'unregistered'] as FilterType[]).map((t) => (
-              <View
-                key={t}
-                className={classnames(styles.filterTab, filter === t && styles.filterTabActive)}
-                onClick={() => setFilter(t)}
-              >
-                <Text
-                  className={classnames(
-                    styles.filterTabText,
-                    filter === t && styles.filterTabTextActive
-                  )}
-                >
-                  {t === 'all'
-                    ? `All (${contacts.length})`
-                    : t === 'registered'
-                    ? `Registered (${registeredCount})`
-                    : `Not Registered (${contacts.length - registeredCount})`}
-                </Text>
-              </View>
-            ))}
-          </View>
-
           {/* 联系人列表 */}
           <View className={styles.contactList}>
             {loading ? (
@@ -297,7 +257,7 @@ const ContactsPage: React.FC = () => {
                 <Text className={styles.loadingText}>Loading...</Text>
               </View>
             ) : filteredContacts.length === 0 ? (
-              <EmptyState icon="📋" title="No contacts yet" />
+              <EmptyState icon="📋" title="No registered friends found" desc="No contacts have registered yet" />
             ) : (
               <ScrollView scrollY>
                 {filteredContacts.map((contact, idx) => {
@@ -319,15 +279,9 @@ const ContactsPage: React.FC = () => {
                       <View className={styles.contactInfo}>
                         <View style={{ display: 'flex', alignItems: 'center' }}>
                           <Text className={styles.contactName}>{displayName}</Text>
-                          {contact.registered && (
-                            <View className={styles.registeredTag}>
-                              <Text className={styles.registeredText}>Registered</Text>
-                            </View>
-                          )}
                         </View>
                         <Text className={styles.contactPhone}>
-                          @{contact.openid || contact.phone}
-                          {contact.registered ? ` · ${contact.phone}` : ''}
+                          @{contact.openid || contact.phone} · {contact.phone}
                         </Text>
                       </View>
                       {renderButton(contact, key)}
