@@ -57,8 +57,8 @@ const InviteModal: React.FC<InviteModalProps> = ({ visible, roomCode, roomId, on
     <View className={styles.overlay} onClick={onClose}>
       <View className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <View className={styles.header}>
-          <Text className={styles.title}>邀请好友</Text>
-          {roomCode && <Text className={styles.roomCode}>房间号: {roomCode}</Text>}
+          <Text className={styles.title}>Invite Friends</Text>
+          {roomCode && <Text className={styles.roomCode}>Room Code: {roomCode}</Text>}
           <View className={styles.closeBtn} onClick={onClose}>
             <Text className={styles.closeIcon}>✕</Text>
           </View>
@@ -67,7 +67,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ visible, roomCode, roomId, on
         <View className={styles.searchBar}>
           <Input
             className={styles.searchInput}
-            placeholder="搜索好友昵称"
+            placeholder="Search friends by nickname"
             value={searchKey}
             onInput={(e) => setSearchKey(e.detail.value)}
           />
@@ -76,10 +76,10 @@ const InviteModal: React.FC<InviteModalProps> = ({ visible, roomCode, roomId, on
         <ScrollView scrollY className={styles.friendList}>
           {loading ? (
             <View className={styles.loadingWrap}>
-              <Text className={styles.loadingText}>加载中...</Text>
+              <Text className={styles.loadingText}>Loading...</Text>
             </View>
           ) : filteredFriends.length === 0 ? (
-            <EmptyState icon="🔍" title="未找到好友" desc="去通讯录添加更多好友吧" />
+            <EmptyState icon="🔍" title="No friends found" desc="Add more friends in your contacts" />
           ) : (
             filteredFriends.map((friend) => (
               <View key={friend.openid} className={styles.friendRow}>
@@ -94,7 +94,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ visible, roomCode, roomId, on
                       friend.status === 'busy' && styles.busyStatus
                     )}
                   >
-                    {friend.status === 'online' ? '在线' : friend.status === 'busy' ? '游戏中' : '离线'}
+                    {friend.status === 'online' ? 'Online' : friend.status === 'busy' ? 'In Game' : 'Offline'}
                   </Text>
                 </View>
                 <Button
@@ -106,7 +106,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ visible, roomCode, roomId, on
                   onClick={() => handleInvite(friend)}
                 >
                   <Text className={styles.inviteBtnText}>
-                    {invitedIds.has(friend.openid) ? '已邀请' : '邀请'}
+                    {invitedIds.has(friend.openid) ? 'Invited' : 'Invite'}
                   </Text>
                 </Button>
               </View>

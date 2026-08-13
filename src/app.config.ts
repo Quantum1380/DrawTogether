@@ -11,7 +11,7 @@ export default defineAppConfig({
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#ffffff',
-    navigationBarTitleText: '你画我猜',
+    navigationBarTitleText: 'Draw Together',
     navigationBarTextStyle: 'black'
   },
   tabBar: {
@@ -22,25 +22,25 @@ export default defineAppConfig({
     list: [
       {
         pagePath: 'pages/index/index',
-        text: '首页',
+        text: 'Home',
         iconPath: 'assets/tabbar/home.svg',
         selectedIconPath: 'assets/tabbar/home-selected.svg'
       },
       {
         pagePath: 'pages/friends/index',
-        text: '好友',
+        text: 'Friends',
         iconPath: 'assets/tabbar/friends.svg',
         selectedIconPath: 'assets/tabbar/friends-selected.svg'
       },
       {
         pagePath: 'pages/message/index',
-        text: '消息',
+        text: 'Messages',
         iconPath: 'assets/tabbar/message.svg',
         selectedIconPath: 'assets/tabbar/message-selected.svg'
       },
       {
         pagePath: 'pages/mine/index',
-        text: '我的',
+        text: 'Me',
         iconPath: 'assets/tabbar/mine.svg',
         selectedIconPath: 'assets/tabbar/mine-selected.svg'
       }

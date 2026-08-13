@@ -1,4 +1,4 @@
 export default definePageConfig({
-  navigationBarTitleText: '游戏中',
+  navigationBarTitleText: 'In Game',
   disableScroll: true,
 });

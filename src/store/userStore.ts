@@ -15,6 +15,7 @@ interface UserState {
   setProfile: (profile: UserProfile | null) => void;
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string, nickname?: string) => Promise<void>;
+  registerByPhone: (phone: string, password: string, nickname?: string) => Promise<void>;
   logout: () => Promise<void>;
   checkLogin: () => boolean;
 }
@@ -90,6 +91,11 @@ export const useUserStore = create<UserState>((set, get) => ({
 
   register: async (username, password, nickname) => {
     const { user } = await authService.register(username, password, nickname);
+    set({ profile: user, loggedIn: true });
+  },
+
+  registerByPhone: async (phone, password, nickname) => {
+    const { user } = await authService.registerByPhone(phone, password, nickname);
     set({ profile: user, loggedIn: true });
   },
 

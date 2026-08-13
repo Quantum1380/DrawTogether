@@ -85,6 +85,9 @@ const UserSchema = new Schema<IUser>({
 });
 
 UserSchema.index({ 'banStatus.banned': 1 });
+// phone sparse unique index：空字符串不参与唯一性约束，
+// 这样用用户名注册的用户 phone='' 不会冲突；只有手机号注册的用户 phone 才唯一
+UserSchema.index({ phone: 1 }, { unique: true, sparse: true });
 
 UserSchema.methods.toJSON = function () {
   const obj = this.toObject();

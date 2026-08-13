@@ -19,7 +19,7 @@ const PlayerSlot: React.FC<PlayerSlotProps> = ({ player, isOwner, currentDrawer 
         <View className={styles.emptyAvatar}>
           <Text className={styles.plus}>+</Text>
         </View>
-        <Text className={styles.emptyText}>空位</Text>
+        <Text className={styles.emptyText}>Empty</Text>
       </View>
     );
   }
@@ -29,7 +29,7 @@ const PlayerSlot: React.FC<PlayerSlotProps> = ({ player, isOwner, currentDrawer 
   return (
     <View className={classnames(styles.slot, styles.slotFilled, isDrawing && styles.drawing)}>
       {player.isOwner && (
-        <View className={styles.ownerTag}><Text className={styles.ownerText}>房主</Text></View>
+        <View className={styles.ownerTag}><Text className={styles.ownerText}>Host</Text></View>
       )}
       <Text className={styles.name}>{player.nickname}</Text>
       <View className={styles.avatarContainer}>
@@ -57,10 +57,10 @@ const PlayerSlot: React.FC<PlayerSlotProps> = ({ player, isOwner, currentDrawer 
             </Text>
           </View>
         )}
-        {isDrawing && <View className={styles.drawerTag}><Text className={styles.drawerText}>画中</Text></View>}
+        {isDrawing && <View className={styles.drawerTag}><Text className={styles.drawerText}>Drawing</Text></View>}
       </View>
       <Text className={classnames(styles.statusText, player.isReady ? styles.readyText : styles.unreadyText)}>
-        {player.isReady ? '已准备' : '未准备'}
+        {player.isReady ? 'Ready' : 'Not Ready'}
       </Text>
     </View>
   );

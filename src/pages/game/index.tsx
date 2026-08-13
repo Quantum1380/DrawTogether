@@ -56,7 +56,7 @@ const GamePage: React.FC = () => {
   const [showExitModal, setShowExitModal] = useState(false);
   const [showForceExitModal, setShowForceExitModal] = useState(false);
   const [scores, setScores] = useState<PlayerScore[]>([
-    { openid: profile?.openid || 'user_001', nickname: profile?.nickname || '我', score: 0 },
+    { openid: profile?.openid || 'user_001', nickname: profile?.nickname || 'Me', score: 0 },
   ]);
 
   // 只有当 currentDrawer 明确等于当前用户时才是画者；
@@ -261,7 +261,7 @@ const GamePage: React.FC = () => {
       _id: `msg_${Date.now()}`,
       roomId: '',
       openid: 'system',
-      nickname: '系统',
+      nickname: 'System',
       avatar: '',
       content,
       type: 'system',
@@ -281,7 +281,7 @@ const GamePage: React.FC = () => {
     const allGuessed = guessers.every((s) => guessedSetRef.current.has(s.openid));
     if (allGuessed) {
       roundEndedRef.current = true;
-      addSystemMessage(`全员猜对！正确答案是「${word}」`);
+      addSystemMessage(`Everyone guessed correctly! The answer is "${word}"`);
       setTimeLeft(0);
       setTimeout(() => setShowResult(true), 1500);
     }
@@ -360,14 +360,14 @@ const GamePage: React.FC = () => {
           s.openid === data.openid ? { ...s, score: s.score + data.bonus } : s
         )
       );
-      addSystemMessage(`${data.nickname} 猜对了！+${data.bonus}分`);
+      addSystemMessage(`${data.nickname} guessed correctly! +${data.bonus} pts`);
       const correctMsg: ChatMessage = {
         _id: `msg_${Date.now()}_correct_${data.openid}`,
         roomId,
         openid: data.openid,
         nickname: data.nickname,
         avatar: '',
-        content: '猜对了！',
+        content: 'Correct!',
         type: 'correct',
         createTime: new Date().toISOString(),
       };
@@ -399,7 +399,7 @@ const GamePage: React.FC = () => {
       roundEndedRef.current = false;
       setMessages([]);
       setShowResult(false);
-      addSystemMessage(`第 ${room.currentRound} 轮 · 轮到 ${room.players.find(p => p.openid === room.currentDrawer)?.nickname || '下一位玩家'} 作画！`);
+      addSystemMessage(`Round ${room.currentRound} · ${room.players.find(p => p.openid === room.currentDrawer)?.nickname || 'Next player'} is drawing!`);
     };
 
     // 整局游戏结束（所有大回合跑完）
@@ -483,7 +483,7 @@ const GamePage: React.FC = () => {
       return;
     }
     roundEndedRef.current = true;
-    addSystemMessage(`时间到！正确答案是「${word}」`);
+    addSystemMessage(`Time's up! The answer was "${word}"`);
     setTimeout(() => setShowResult(true), 2000);
   };
 
@@ -520,7 +520,6 @@ const GamePage: React.FC = () => {
 
   const startDrawing = (e: any) => {
     if (!isDrawer || !ctxRef.current) return;
-    e.preventDefault?.();
     isDrawingRef.current = true;
     const point = getCanvasPoint(e);
     lastPointRef.current = point;
@@ -542,7 +541,6 @@ const GamePage: React.FC = () => {
 
   const moveDrawing = (e: any) => {
     if (!isDrawer || !isDrawingRef.current || !ctxRef.current) return;
-    e.preventDefault?.();
     const point = getCanvasPoint(e);
     const last = lastPointRef.current;
     const color = isEraser ? '#ffffff' : selectedColor;
@@ -601,14 +599,14 @@ const GamePage: React.FC = () => {
           s.openid === myOpenid ? { ...s, score: s.score + bonus } : s
         )
       );
-      addSystemMessage(`${profile?.nickname} 猜对了！+${bonus}分`);
+      addSystemMessage(`${profile?.nickname} guessed correctly! +${bonus} pts`);
       const correctMsg: ChatMessage = {
         _id: `msg_${Date.now()}_correct_${myOpenid}`,
         roomId,
         openid: myOpenid,
-        nickname: profile?.nickname || '我',
+        nickname: profile?.nickname || 'Me',
         avatar: '',
-        content: '猜对了！',
+        content: 'Correct!',
         type: 'correct',
         createTime: new Date().toISOString(),
       };
@@ -617,7 +615,7 @@ const GamePage: React.FC = () => {
       socketRef.current?.emit('game:correct', {
         roomId,
         openid: myOpenid,
-        nickname: profile?.nickname || '我',
+        nickname: profile?.nickname || 'Me',
         bonus,
       });
       // 本机也参与判断全员是否都猜对
@@ -628,7 +626,7 @@ const GamePage: React.FC = () => {
         _id: `msg_${Date.now()}`,
         roomId,
         openid: profile?.openid || 'user_001',
-        nickname: profile?.nickname || '我',
+        nickname: profile?.nickname || 'Me',
         avatar: '',
         content: text,
         type: 'chat',
@@ -641,7 +639,7 @@ const GamePage: React.FC = () => {
         const closeMsg: ChatMessage = {
           ...msg,
           _id: `msg_${Date.now()}_close`,
-          content: `${text}...很接近了！`,
+          content: `${text}... so close!`,
           type: 'close',
         };
         setMessages((prev) => [...prev, closeMsg]);
@@ -715,11 +713,11 @@ const GamePage: React.FC = () => {
           handleClearCanvas();
           setGuessed(false);
           setMessages([]);
-          addSystemMessage(`第 ${nextRoom.currentRound} 轮 · 轮到 ${nextRoom.players.find(p => p.openid === nextRoom.currentDrawer)?.nickname || '下一位玩家'} 作画！`);
+          addSystemMessage(`Round ${nextRoom.currentRound} · ${nextRoom.players.find(p => p.openid === nextRoom.currentDrawer)?.nickname || 'Next player'} is drawing!`);
         }
       } catch (err) {
         // 失败就兜底：回到结算状态并提示
-        const msg = err instanceof Error ? err.message : '切换回合失败';
+        const msg = err instanceof Error ? err.message : 'Failed to switch round';
         addSystemMessage(msg);
         setShowResult(true);
       }
@@ -770,7 +768,7 @@ const GamePage: React.FC = () => {
     if (isDrawer) {
       return (
         <View className={styles.wordDisplay}>
-          <Text className={styles.wordHintLabel}>画:</Text>
+          <Text className={styles.wordHintLabel}>Draw:</Text>
           {word.split('').map((char, idx) => (
             <View key={idx} className={styles.wordChar}>
               <Text>{char}</Text>
@@ -781,7 +779,7 @@ const GamePage: React.FC = () => {
     }
     return (
       <View className={styles.wordDisplay}>
-        <Text className={styles.wordHintLabel}>猜:</Text>
+        <Text className={styles.wordHintLabel}>Guess:</Text>
         {word.split('').map((_, idx) => (
           <View key={idx} className={styles.wordPlaceholder} />
         ))}
@@ -798,13 +796,13 @@ const GamePage: React.FC = () => {
       <View className={styles.topBar}>
         <View className={styles.topRow}>
           <View className={styles.roundInfo}>
-            <Text className={styles.roundText}>第{round}/{totalRounds}轮</Text>
+            <Text className={styles.roundText}>Round {round}/{totalRounds}</Text>
           </View>
           <View className={styles.timerCenter}>
             <Text className={styles.timerBig}>{timeLeft}s</Text>
           </View>
           <View className={styles.exitBtn} onClick={handleExit}>
-            <Text className={styles.exitBtnText}>退出</Text>
+            <Text className={styles.exitBtnText}>Exit</Text>
           </View>
         </View>
         {renderWord()}
@@ -852,7 +850,7 @@ const GamePage: React.FC = () => {
         {/* 直播样式消息浮层：黑底半透明，浮在画板左侧，不顶画板 */}
         <ScrollView scrollY className={styles.chatOverlay} ref={chatListRef}>
           {messages.length === 0 ? (
-            <Text className={styles.overlayEmpty}>快开始猜词吧！</Text>
+            <Text className={styles.overlayEmpty}>Start guessing!</Text>
           ) : (
             messages.map((msg) => (
               <View key={msg._id} className={styles.overlayItem}>
@@ -926,15 +924,15 @@ const GamePage: React.FC = () => {
 
       <View className={styles.inputArea}>
         {isDrawer ? (
-          <Text className={styles.viewerHint}>你正在绘画，其他玩家在猜词...</Text>
+          <Text className={styles.viewerHint}>You're drawing, others are guessing...</Text>
         ) : guessed ? (
-          <Text className={styles.viewerHint}>已猜对！等待回合结束...</Text>
+          <Text className={styles.viewerHint}>Got it! Waiting for round to end...</Text>
         ) : (
           isWeapp ? (
             <>
               <Input
                 className={styles.guessInput}
-                placeholder="输入你的猜测..."
+                placeholder="Enter your guess"
                 value={guessText}
                 onInput={(e) => setGuessText(e.detail.value)}
                 onConfirm={handleSendGuess}
@@ -945,14 +943,14 @@ const GamePage: React.FC = () => {
                 onClick={handleSendGuess}
                 disabled={!guessText.trim()}
               >
-                <Text className={styles.sendBtnText}>发送</Text>
+                <Text className={styles.sendBtnText}>Send</Text>
               </Button>
             </>
           ) : (
             <>
               <input
                 className={styles.guessInput}
-                placeholder="输入你的猜测..."
+                placeholder="Enter your guess"
                 value={guessText}
                 onChange={(e) => setGuessText(e.target.value)}
                 onKeyDown={(e) => {
@@ -963,9 +961,9 @@ const GamePage: React.FC = () => {
                 className={classnames(styles.sendBtn, !guessText.trim() && styles.sendBtnDisabled)}
                 onClick={handleSendGuess}
                 disabled={!guessText.trim()}
-                >
-                  发送
-                </button>
+              >
+                Send
+              </button>
               </>
             )
           )}
@@ -975,22 +973,22 @@ const GamePage: React.FC = () => {
         <View className={styles.overlay}>
           <View className={styles.resultModal}>
             <Text className={styles.resultTitle}>
-              {isFinalTurnOrEnded ? '游戏结束' : '本回合结束'}
+              {isFinalTurnOrEnded ? 'Game Over' : 'Round over'}
             </Text>
             <Text className={styles.resultWord}>
-              正确答案: <Text className={styles.resultWordText}>{word}</Text>
+              Answer: <Text className={styles.resultWordText}>{word}</Text>
             </Text>
             <View className={styles.resultList}>
               {sortedScores.map((s, idx) => (
                 <View key={s.openid} className={styles.resultItem}>
                   <Text className={styles.resultRank}>{idx + 1}</Text>
                   <Text className={styles.resultName}>{s.nickname}</Text>
-                  <Text className={styles.resultScore}>{s.score}分</Text>
+                  <Text className={styles.resultScore}>{s.score} pts</Text>
                 </View>
               ))}
             </View>
             <Button className={styles.resultBtn} onClick={handleNextRound}>
-              {isFinalTurnOrEnded ? '返回房间' : '下一位画者'}
+              {isFinalTurnOrEnded ? 'Return to Room' : 'Next Drawer'}
             </Button>
           </View>
         </View>
@@ -998,17 +996,17 @@ const GamePage: React.FC = () => {
 
       <ConfirmModal
         visible={showExitModal}
-        title="退出游戏"
-        content="确定要退出本局游戏吗？"
+        title="Exit Game"
+        content="Are you sure you want to exit the game?"
         onConfirm={handleExitConfirm}
         onCancel={() => setShowExitModal(false)}
       />
 
       <ConfirmModal
         visible={showForceExitModal}
-        title="游戏结束"
-        content="其他玩家已离开，本局游戏被迫结束"
-        confirmText="返回首页"
+        title="Game Over"
+        content="Other players have left. The game has ended."
+        confirmText="Back to Home"
         showCancel={false}
         onConfirm={handleForceExit}
       />

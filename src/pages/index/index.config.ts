@@ -1,3 +1,6 @@
 export default definePageConfig({
-  navigationBarTitleText: '你画我猜',
+  navigationBarTitleText: 'Draw Together',
+  enablePullDownRefresh: true,
+  backgroundTextStyle: 'dark',
+  backgroundColor: '#f5f5fa',
 });

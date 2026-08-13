@@ -10,7 +10,7 @@ interface EmptyStateProps {
 
 const EmptyState: React.FC<EmptyStateProps> = ({
   icon = '📭',
-  title = '暂无数据',
+  title = 'No data',
   desc = '',
 }) => {
   return (

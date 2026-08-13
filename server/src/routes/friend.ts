@@ -214,7 +214,7 @@ router.post('/request', authMiddleware, async (req: AuthRequest, res) => {
     await Message.create({
       fromOpenid: req.openid,
       toOpenid,
-      content: `${fromUser?.nickname || '某位玩家'} 请求添加你为好友${message ? '：' + message : ''}`,
+      content: `${fromUser?.nickname || 'Someone'} wants to add you as a friend${message ? ': ' + message : ''}`,
       type: 'friend_request',
       data: JSON.stringify({
         requestId: request._id.toString(),
@@ -288,7 +288,7 @@ router.post('/requests/:requestId/accept', authMiddleware, async (req: AuthReque
     await Message.create({
       fromOpenid: req.openid,
       toOpenid: request.fromOpenid,
-      content: '对方已同意你的好友申请',
+      content: 'accepted your friend request',
       type: 'system',
       data: '',
       isRead: false,

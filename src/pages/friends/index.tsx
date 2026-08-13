@@ -119,14 +119,14 @@ const FriendsPage: React.FC = () => {
     try {
       // 统一调用一键邀请接口：自动创建房间 + 发送邀请消息
       const result = await messageService.inviteAndCreateRoom(friend.openid);
-      Taro.showToast({ title: '邀请已发送', icon: 'success' });
+      Taro.showToast({ title: 'Invite sent', icon: 'success' });
 
       // 立即把房主自己带入房间页
       Taro.redirectTo({
         url: `/pages/room/index?id=${result.roomId}&roomCode=${result.roomCode}`,
       });
     } catch (err: any) {
-      Taro.showToast({ title: err?.message || '邀请失败', icon: 'none' });
+      Taro.showToast({ title: err?.message || 'Invite failed', icon: 'none' });
     } finally {
       setInvitingSet(prev => {
         const next = new Set(prev);
@@ -144,13 +144,13 @@ const FriendsPage: React.FC = () => {
     setApplyingSet(prev => new Set(prev).add(user.openid));
     try {
       await friendService.sendFriendRequest(user.openid, '');
-      Taro.showToast({ title: '申请已发送', icon: 'success' });
+      Taro.showToast({ title: 'Request sent', icon: 'success' });
       // 刷新搜索结果状态（或直接本地更新）
       setSearchResults(prev => prev.map(u =>
         u.openid === user.openid ? { ...u, hasRequested: true } : u
       ));
     } catch (err: any) {
-      Taro.showToast({ title: err?.message || '发送失败', icon: 'none' });
+      Taro.showToast({ title: err?.message || 'Send failed', icon: 'none' });
     } finally {
       setApplyingSet(prev => {
         const next = new Set(prev);
@@ -192,7 +192,7 @@ const FriendsPage: React.FC = () => {
     <View className={styles.container}>
       <View className={styles.header}>
         <View className={styles.headerTop}>
-          <Text className={styles.pageTitle}>寻找朋友</Text>
+          <Text className={styles.pageTitle}>Find Friends</Text>
           <View className={styles.settingsBtn} onClick={handleSyncContacts}>
             <Text className={styles.settingsIcon}>⚙️</Text>
           </View>
@@ -202,7 +202,7 @@ const FriendsPage: React.FC = () => {
           <Text className={styles.searchIcon}>🔍</Text>
           <input
             className={styles.searchInput}
-            placeholder="用户名、UID 或电话号码"
+            placeholder="Username, UID, or phone number"
             value={searchKey}
             onInput={(e) => handleSearchInput((e.target as HTMLInputElement).value)}
           />
@@ -221,13 +221,13 @@ const FriendsPage: React.FC = () => {
         <View className={styles.permissionCard}>
           <View className={styles.permissionIcon}>📖</View>
           <View className={styles.permissionContent}>
-            <Text className={styles.permissionTitle}>和认识的人一起玩</Text>
+            <Text className={styles.permissionTitle}>Play with people you know</Text>
             <Text className={styles.permissionDesc}>
-              允许联系权限，我们就能找到已经在 Draw Together 上的朋友。
+              Allow contacts permission and we'll find friends already on Draw Together.
             </Text>
           </View>
           <View className={styles.permissionBtn} onClick={handleSyncContacts}>
-            <Text className={styles.permissionBtnText}>同步</Text>
+            <Text className={styles.permissionBtnText}>Sync</Text>
           </View>
         </View>
       )}
@@ -237,13 +237,13 @@ const FriendsPage: React.FC = () => {
         <View className={styles.friendList}>
           {searching ? (
             <View className={styles.loadingWrap}>
-              <Text className={styles.loadingText}>搜索中...</Text>
+              <Text className={styles.loadingText}>Searching...</Text>
             </View>
           ) : searchResults.length === 0 ? (
             <View className={styles.emptyState}>
               <Text className={styles.emptyIcon}>🔍</Text>
-              <Text className={styles.emptyTitle}>没有找到用户</Text>
-              <Text className={styles.emptyDesc}>试试其他关键字吧</Text>
+              <Text className={styles.emptyTitle}>No users found</Text>
+              <Text className={styles.emptyDesc}>Try different keywords</Text>
             </View>
           ) : (
             searchResults.map((user) => {
@@ -261,22 +261,22 @@ const FriendsPage: React.FC = () => {
               if (user.isFriend) {
                 if (user.status === 'online') {
                   btnClass = styles.actionInvite;
-                  btnText = invitingSet.has(user.openid) ? '创建中...' : '邀请';
+                  btnText = invitingSet.has(user.openid) ? 'Creating...' : 'Invite';
                   disabled = invitingSet.has(user.openid);
                   handler = () => handleInviteFriend(user, 'search');
                 } else {
                   btnClass = styles.actionOffline;
-                  btnText = '未上线';
+                  btnText = 'Offline';
                   disabled = true;
                 }
               } else {
                 if (user.hasRequested) {
                   btnClass = styles.actionApplied;
-                  btnText = '已申请';
+                  btnText = 'Requested';
                   disabled = true;
                 } else {
                   btnClass = styles.actionApply;
-                  btnText = applyingSet.has(user.openid) ? '发送中...' : '申请';
+                  btnText = applyingSet.has(user.openid) ? 'Sending...' : 'Add';
                   disabled = applyingSet.has(user.openid);
                   handler = () => handleSendFriendRequest(user);
                 }
@@ -327,9 +327,9 @@ const FriendsPage: React.FC = () => {
         <>
           <View className={styles.filterTabs}>
             {([
-              { key: 'all', label: '全部', count: friends.length },
-              { key: 'online', label: '在线', count: onlineCount },
-              { key: 'offline', label: '离线', count: offlineCount },
+              { key: 'all', label: 'All', count: friends.length },
+              { key: 'online', label: 'Online', count: onlineCount },
+              { key: 'offline', label: 'Offline', count: offlineCount },
             ] as { key: FilterType; label: string; count: number }[]).map((t) => (
               <View
                 key={t.key}
@@ -349,7 +349,7 @@ const FriendsPage: React.FC = () => {
           {isFromRoom && (
             <View className={styles.inviteBanner}>
               <Text className={styles.inviteBannerText}>
-                点击好友右侧按钮邀请加入房间 {roomCode}
+                Tap the button on the right of a friend to invite them to room {roomCode}
               </Text>
             </View>
           )}
@@ -357,13 +357,13 @@ const FriendsPage: React.FC = () => {
           <View className={styles.friendList}>
             {loading ? (
               <View className={styles.loadingWrap}>
-                <Text className={styles.loadingText}>加载中...</Text>
+                <Text className={styles.loadingText}>Loading...</Text>
               </View>
             ) : filteredFriends.length === 0 ? (
               <View className={styles.emptyState}>
                 <Text className={styles.emptyIcon}>👥</Text>
-                <Text className={styles.emptyTitle}>还没有好友</Text>
-                <Text className={styles.emptyDesc}>去通讯录同步好友吧</Text>
+                <Text className={styles.emptyTitle}>No friends yet</Text>
+                <Text className={styles.emptyDesc}>Sync friends from contacts</Text>
               </View>
             ) : (
               filteredFriends.map((friend) => {
@@ -393,7 +393,7 @@ const FriendsPage: React.FC = () => {
                     <View className={styles.friendInfo}>
                       <Text className={styles.friendName}>{friend.nickname}</Text>
                       <Text className={styles.friendSource}>
-                        {friend.source === 'contacts' ? '来自您的联系人' : '搜索添加'}
+                        {friend.source === 'contacts' ? 'From your contacts' : 'Added via search'}
                         {friend.lastSeen ? ` · ${friend.lastSeen}` : ''}
                       </Text>
                     </View>
@@ -413,7 +413,7 @@ const FriendsPage: React.FC = () => {
                           !online && styles.actionTextDisabled
                         )}
                       >
-                        {online ? (inv ? '创建中...' : '邀请') : '未上线'}
+                        {online ? (inv ? 'Creating...' : 'Invite') : 'Offline'}
                       </Text>
                     </View>
                   </View>
@@ -423,7 +423,7 @@ const FriendsPage: React.FC = () => {
           </View>
 
           <View className={styles.addFriendBtn} onClick={handleSyncContacts}>
-            <Text className={styles.addFriendText}>+ 添加好友</Text>
+            <Text className={styles.addFriendText}>+ Add Friend</Text>
           </View>
         </>
       )}

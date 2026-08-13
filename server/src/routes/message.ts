@@ -86,7 +86,7 @@ export function createMessageRouter(io: IoServer) {
       const msg = await Message.create({
         fromOpenid: req.openid,
         toOpenid,
-        content: `${fromUser?.nickname || '你的好友'} 邀请你加入房间 ${roomCode}，一起来玩你画我猜吧！`,
+        content: `${fromUser?.nickname || 'A friend'} invited you to join room ${roomCode}. Come play Draw Together!`,
         type: 'invite',
         data: JSON.stringify({
           roomId,
@@ -156,7 +156,7 @@ export function createMessageRouter(io: IoServer) {
       const msg = await Message.create({
         fromOpenid: req.openid,
         toOpenid,
-        content: `${fromUser.nickname} 邀请你加入房间 ${roomCode}，一起来玩你画我猜吧！`,
+        content: `${fromUser.nickname} invited you to join room ${roomCode}. Come play Draw Together!`,
         type: 'invite',
         data: JSON.stringify({
           roomId,

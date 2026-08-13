@@ -25,15 +25,15 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onClick }) => {
           <Text className={styles.title}>{room.name}</Text>
           {isPlaying ? (
             <View className={classnames(styles.badge, styles.badgePlaying)}>
-              <Text className={styles.badgeText}>游戏中</Text>
+              <Text className={styles.badgeText}>In Game</Text>
             </View>
           ) : (
             <View className={classnames(styles.badge, styles.badgeWaiting)}>
-              <Text className={styles.badgeText}>等待中</Text>
+              <Text className={styles.badgeText}>Waiting</Text>
             </View>
           )}
         </View>
-        <Text className={styles.roomCode}>房间号 {room.roomCode}</Text>
+        <Text className={styles.roomCode}>Room Code: {room.roomCode}</Text>
       </View>
 
       <View className={styles.players}>
@@ -50,16 +50,16 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onClick }) => {
           )}
         </View>
         <Text className={styles.playerCount}>
-          {playerCount}/{room.maxPlayers}人
+          {playerCount}/{room.maxPlayers} players
         </Text>
       </View>
 
       <View className={styles.footer}>
-        <Text className={styles.owner}>房主: {room.ownerNickname}</Text>
-        <Text className={styles.rounds}>{room.totalRounds}回合</Text>
+        <Text className={styles.owner}>Host: {room.ownerNickname}</Text>
+        <Text className={styles.rounds}>{room.totalRounds} rounds</Text>
       </View>
 
-      {isFull && <View className={styles.fullMask}><Text className={styles.fullText}>已满员</Text></View>}
+      {isFull && <View className={styles.fullMask}><Text className={styles.fullText}>Full</Text></View>}
     </View>
   );
 };

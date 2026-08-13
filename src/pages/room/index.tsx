@@ -61,7 +61,7 @@ const RoomPage: React.FC = () => {
 
   const loadRoom = useCallback(async () => {
     if (!roomId) {
-      setErrorMsg('缺少房间参数');
+      setErrorMsg('Missing room parameter');
       setLoading(false);
       return;
     }
@@ -89,7 +89,7 @@ const RoomPage: React.FC = () => {
         navigateToGame(data);
       }
     } catch (err) {
-      const msg = err instanceof Error ? err.message : '加载失败';
+      const msg = err instanceof Error ? err.message : 'Load failed';
       console.error('[Room] loadRoom 失败:', msg, err);
       // 接口返回了非 0 码（如"房间不存在"），这里直接显示后端的错误
       setErrorMsg(msg);
@@ -193,9 +193,9 @@ const RoomPage: React.FC = () => {
       });
       setRoom(updated);
       setShowSettings(false);
-      Taro.showToast({ title: '保存成功', icon: 'success' });
+      Taro.showToast({ title: 'Saved', icon: 'success' });
     } catch (err: any) {
-      Taro.showToast({ title: err?.message || '保存失败', icon: 'none' });
+      Taro.showToast({ title: err?.message || 'Save failed', icon: 'none' });
     } finally {
       setSavingSettings(false);
     }
@@ -207,7 +207,7 @@ const RoomPage: React.FC = () => {
       const updated = await roomService.toggleReady(room._id);
       setRoom(updated);
     } catch (err) {
-      Taro.showToast({ title: '操作失败', icon: 'none' });
+      Taro.showToast({ title: 'Operation failed', icon: 'none' });
     }
   };
 
@@ -215,11 +215,11 @@ const RoomPage: React.FC = () => {
     if (!room) return;
     const allReady = room.players.every((p) => p.isReady || p.isOwner);
     if (!allReady) {
-      Taro.showToast({ title: '还有玩家未准备', icon: 'none' });
+      Taro.showToast({ title: 'Some players are not ready', icon: 'none' });
       return;
     }
     if (room.players.length < 2) {
-      Taro.showToast({ title: '至少需要2名玩家', icon: 'none' });
+      Taro.showToast({ title: 'At least 2 players required', icon: 'none' });
       return;
     }
     // 关键：重置跳转守卫，否则上一局游戏结束后 navigateBack 回到房间页，
@@ -232,7 +232,7 @@ const RoomPage: React.FC = () => {
       // 避免与服务端广播的 game:started 回声造成重复跳转
       navigateToGame(updated);
     } catch (err) {
-      Taro.showToast({ title: '开始失败', icon: 'none' });
+      Taro.showToast({ title: 'Start failed', icon: 'none' });
     } finally {
       setStarting(false);
     }
@@ -267,7 +267,7 @@ const RoomPage: React.FC = () => {
   if (loading) {
     return (
       <View className={styles.loadingWrap}>
-        <Text className={styles.loadingText}>加载中...</Text>
+        <Text className={styles.loadingText}>Loading...</Text>
       </View>
     );
   }
@@ -276,7 +276,7 @@ const RoomPage: React.FC = () => {
     return (
       <View className={styles.loadingWrap}>
         <Text className={styles.loadingText}>
-          {errorMsg || '房间不存在'}
+          {errorMsg || "Room doesn't exist"}
         </Text>
         {errorMsg && (
           <View style={{ marginTop: 24 }}>
@@ -284,7 +284,7 @@ const RoomPage: React.FC = () => {
               className={styles.startBtn}
               onClick={() => Taro.navigateBack()}
             >
-              返回
+              Back
             </Button>
           </View>
         )}
@@ -312,7 +312,7 @@ const RoomPage: React.FC = () => {
           <View className={styles.roomNameRight}>
             <View className={styles.roomStatus}>
               <Text className={styles.roomStatusText}>
-                {room.status === 'waiting' ? '等待中' : room.status === 'playing' ? '游戏中' : '已结束'}
+                {room.status === 'waiting' ? 'Waiting' : room.status === 'playing' ? 'In Game' : 'Ended'}
               </Text>
             </View>
             {isOwner && room.status === 'waiting' && (
@@ -324,18 +324,18 @@ const RoomPage: React.FC = () => {
         </View>
         <View className={styles.roomCodeCard}>
           <View>
-            <Text className={styles.roomCodeLabel}>房间号</Text>
+            <Text className={styles.roomCodeLabel}>Room Code</Text>
             <Text className={styles.roomCodeValue}>{room.roomCode}</Text>
           </View>
           <Button className={styles.copyBtn} onClick={handleCopyCode}>
-            <Text className={styles.copyBtnText}>复制</Text>
+            <Text className={styles.copyBtnText}>Copy</Text>
           </Button>
         </View>
       </View>
 
       {/* 玩家列表 */}
       <Text className={styles.sectionTitle}>
-        玩家 ({room.players.length}/{room.maxPlayers})
+        Players ({room.players.length}/{room.maxPlayers})
       </Text>
       <View className={styles.playerGrid}>
         {slots.map((player, idx) => (
@@ -352,21 +352,21 @@ const RoomPage: React.FC = () => {
       {/* 游戏信息 */}
       <View className={styles.gameInfo}>
         <View className={styles.infoRow}>
-          <Text className={styles.infoLabel}>回合数</Text>
-          <Text className={styles.infoValue}>{room.totalRounds} 回合</Text>
+          <Text className={styles.infoLabel}>Rounds</Text>
+          <Text className={styles.infoValue}>{room.totalRounds} Rounds</Text>
         </View>
         <View className={styles.infoRow}>
-          <Text className={styles.infoLabel}>每轮时长</Text>
-          <Text className={styles.infoValue}>{typeof room.drawSeconds === 'number' ? room.drawSeconds : 60} 秒</Text>
+          <Text className={styles.infoLabel}>Time per Round</Text>
+          <Text className={styles.infoValue}>{typeof room.drawSeconds === 'number' ? room.drawSeconds : 60} sec</Text>
         </View>
         <View className={styles.infoRow}>
-          <Text className={styles.infoLabel}>房主</Text>
+          <Text className={styles.infoLabel}>Host</Text>
           <Text className={styles.infoValue}>{room.ownerNickname}</Text>
         </View>
         <View className={styles.infoRow}>
-          <Text className={styles.infoLabel}>状态</Text>
+          <Text className={styles.infoLabel}>Status</Text>
           <Text className={styles.infoValue}>
-            {allReady ? '全部已准备' : '等待玩家准备'}
+            {allReady ? 'All ready' : 'Waiting for players to get ready'}
           </Text>
         </View>
       </View>
@@ -374,17 +374,17 @@ const RoomPage: React.FC = () => {
       {/* 玩法说明 */}
       <View className={styles.wordHint}>
         <Text className={styles.wordHintText}>
-          🎨 玩法说明：房主开始游戏后，每轮由一名玩家绘画，其他玩家在聊天区猜词。猜对越快得分越高！
+          🎨 How to play: After the host starts the game, one player draws each round while the others guess in the chat. The faster you guess, the more points you get!
         </Text>
       </View>
 
       {/* 底部操作栏 */}
       <View className={styles.bottomBar}>
         <Button className={styles.leaveBtn} onClick={handleLeaveRoom}>
-          <Text className={styles.leaveBtnText}>离开</Text>
+          <Text className={styles.leaveBtnText}>Leave</Text>
         </Button>
         <Button className={styles.inviteBtn} onClick={handleInvite}>
-          <Text className={styles.inviteBtnText}>👥 邀请</Text>
+          <Text className={styles.inviteBtnText}>👥 Invite</Text>
         </Button>
         {isOwner ? (
           <Button
@@ -392,7 +392,7 @@ const RoomPage: React.FC = () => {
             onClick={handleStartGame}
             disabled={!canStart || starting}
           >
-            {starting ? '开始中...' : '开始游戏'}
+            {starting ? 'Starting...' : 'Start Game'}
           </Button>
         ) : (
           <Button
@@ -402,7 +402,7 @@ const RoomPage: React.FC = () => {
             )}
             onClick={handleToggleReady}
           >
-            {currentPlayer?.isReady ? '已准备' : '准备'}
+            {currentPlayer?.isReady ? 'Ready' : 'Ready'}
           </Button>
         )}
       </View>
@@ -419,15 +419,15 @@ const RoomPage: React.FC = () => {
       {showSettings && (
         <View className={styles.modalMask} onClick={() => setShowSettings(false)}>
           <View className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
-            <Text className={styles.modalTitle}>房间设置</Text>
+            <Text className={styles.modalTitle}>Room Settings</Text>
 
             {/* 房间名 */}
             <View className={styles.modalField}>
-              <Text className={styles.modalFieldLabel}>房间名</Text>
+              <Text className={styles.modalFieldLabel}>Room Name</Text>
               <input
                 className={styles.modalInput}
                 value={settName}
-                placeholder="请输入房间名"
+                placeholder="Enter room name"
                 maxLength={24}
                 onInput={(e) => setSettName((e.target as HTMLInputElement).value)}
               />
@@ -435,7 +435,7 @@ const RoomPage: React.FC = () => {
 
             {/* 回合数 */}
             <View className={styles.modalField}>
-              <Text className={styles.modalFieldLabel}>回合数</Text>
+              <Text className={styles.modalFieldLabel}>Rounds</Text>
               <View className={styles.optionRow}>
                 {ROUND_OPTIONS.map((n) => (
                   <View
@@ -456,7 +456,7 @@ const RoomPage: React.FC = () => {
 
             {/* 每轮时长 */}
             <View className={styles.modalField}>
-              <Text className={styles.modalFieldLabel}>每轮时长（秒）</Text>
+              <Text className={styles.modalFieldLabel}>Time per Round (sec)</Text>
               <View className={styles.optionRow}>
                 {SECOND_OPTIONS.map((n) => (
                   <View
@@ -477,7 +477,7 @@ const RoomPage: React.FC = () => {
 
             {/* 最大玩家数 */}
             <View className={styles.modalField}>
-              <Text className={styles.modalFieldLabel}>最大玩家数</Text>
+              <Text className={styles.modalFieldLabel}>Max Players</Text>
               <View className={styles.optionRow}>
                 {MAXPLAYER_OPTIONS.map((n) => {
                   const disabled = n < (room?.players.length || 1);
@@ -503,7 +503,7 @@ const RoomPage: React.FC = () => {
                   );
                 })}
               </View>
-              <Text className={styles.modalHint}>少于当前房间人数({room?.players.length || 0})的选项不可选</Text>
+              <Text className={styles.modalHint}>Options less than current player count ({room?.players.length || 0}) are unavailable</Text>
             </View>
 
             {/* 操作按钮 */}
@@ -512,7 +512,7 @@ const RoomPage: React.FC = () => {
                 className={classnames(styles.modalBtn, styles.modalBtnCancel)}
                 onClick={() => setShowSettings(false)}
               >
-                <Text className={styles.modalBtnCancelText}>取消</Text>
+                <Text className={styles.modalBtnCancelText}>Cancel</Text>
               </View>
               <View
                 className={classnames(
@@ -523,7 +523,7 @@ const RoomPage: React.FC = () => {
                 onClick={() => { if (!savingSettings) handleSaveSettings(); }}
               >
                 <Text className={styles.modalBtnConfirmText}>
-                  {savingSettings ? '保存中...' : '保存'}
+                  {savingSettings ? 'Saving...' : 'Save'}
                 </Text>
               </View>
             </View>
@@ -535,18 +535,18 @@ const RoomPage: React.FC = () => {
       {showLeaveModal && (
         <View className={styles.modalMask} onClick={() => { if (!leaving) setShowLeaveModal(false); }}>
           <View className={classnames(styles.modalCard, styles.leaveModalCard)} onClick={(e) => e.stopPropagation()}>
-            <Text className={styles.modalTitle}>离开房间</Text>
+            <Text className={styles.modalTitle}>Leave Room</Text>
             <Text className={styles.modalText}>
               {room?.owner === profile?.openid
-                ? '离开后房主将自动转移给剩余玩家，确定要离开吗？'
-                : '确定要离开当前房间吗？'}
+                ? 'If you leave, host will transfer to a remaining player. Are you sure you want to leave?'
+                : 'Are you sure you want to leave the room?'}
             </Text>
             <View className={styles.modalActions}>
               <View
                 className={classnames(styles.modalBtn, styles.modalBtnCancel, leaving && styles.modalBtnDisabled)}
                 onClick={() => { if (!leaving) setShowLeaveModal(false); }}
               >
-                <Text className={styles.modalBtnCancelText}>取消</Text>
+                <Text className={styles.modalBtnCancelText}>Cancel</Text>
               </View>
               <View
                 className={classnames(
@@ -557,7 +557,7 @@ const RoomPage: React.FC = () => {
                 onClick={() => { if (!leaving) confirmLeaveRoom(); }}
               >
                 <Text className={styles.modalBtnConfirmText}>
-                  {leaving ? '离开中...' : '确定离开'}
+                  {leaving ? 'Leaving...' : 'Leave'}
                 </Text>
               </View>
             </View>

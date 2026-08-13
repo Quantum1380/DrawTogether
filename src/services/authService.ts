@@ -9,7 +9,7 @@ export interface LoginResult {
 }
 
 export const authService = {
-  /** 注册 */
+  /** 注册（用户名方式） */
   async register(username: string, password: string, nickname?: string): Promise<LoginResult> {
     const data = await callFunction<LoginResult>('auth/register', {
       username,
@@ -17,6 +17,18 @@ export const authService = {
       nickname,
     });
     // ⚠️ 必须等待 token 落盘到 Preferences，否则用户立即退出 App 会丢登录态
+    await setToken(data.token);
+    connectSocket();
+    return data;
+  },
+
+  /** 注册（手机号方式，username 自动=UID） */
+  async registerByPhone(phone: string, password: string, nickname?: string): Promise<LoginResult> {
+    const data = await callFunction<LoginResult>('auth/register-phone', {
+      phone,
+      password,
+      nickname,
+    });
     await setToken(data.token);
     connectSocket();
     return data;

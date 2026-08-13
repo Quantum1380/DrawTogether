@@ -25,11 +25,11 @@ const MinePage: React.FC = () => {
 
   const handleSave = async () => {
     if (!editName.trim()) {
-      Taro.showToast({ title: '请输入昵称', icon: 'none' });
+      Taro.showToast({ title: 'Please enter a nickname', icon: 'none' });
       return;
     }
     await updateProfile({ nickname: editName.trim() });
-    Taro.showToast({ title: '保存成功', icon: 'success' });
+    Taro.showToast({ title: 'Saved', icon: 'success' });
     setShowEdit(false);
   };
 
@@ -40,15 +40,15 @@ const MinePage: React.FC = () => {
         Taro.navigateTo({ url: '/pages/contacts/index' });
         break;
       case 'history':
-        Taro.showToast({ title: '功能开发中', icon: 'none' });
+        Taro.showToast({ title: 'Coming soon', icon: 'none' });
         break;
       case 'settings':
-        Taro.showToast({ title: '功能开发中', icon: 'none' });
+        Taro.showToast({ title: 'Coming soon', icon: 'none' });
         break;
       case 'about':
         Taro.showModal({
-          title: '关于我们',
-          content: '你画我猜 v1.0.0\n一款欢乐的多人绘画猜词游戏',
+          title: 'About',
+          content: 'Draw Together v1.0.0\nA fun multiplayer drawing and guessing game',
           showCancel: false,
         });
         break;
@@ -63,13 +63,13 @@ const MinePage: React.FC = () => {
     setLoggingOut(true);
     try {
       await logout();
-      Taro.showToast({ title: '已退出登录', icon: 'success' });
+      Taro.showToast({ title: 'Logged out', icon: 'success' });
       setTimeout(() => {
         Taro.switchTab({ url: '/pages/index/index' });
       }, 600);
     } catch (err) {
       console.error('[Mine] logout error:', err);
-      Taro.showToast({ title: '退出失败，请重试', icon: 'none' });
+      Taro.showToast({ title: 'Logout failed, please retry', icon: 'none' });
     } finally {
       setLoggingOut(false);
     }
@@ -82,10 +82,10 @@ const MinePage: React.FC = () => {
   };
 
   const menuItems = [
-    { key: 'contacts', icon: '📱', title: '通讯录同步', desc: '发现已注册好友', bg: styles.menuIconBg1 },
-    { key: 'history', icon: '📊', title: '游戏记录', desc: '查看历史战绩', bg: styles.menuIconBg2 },
-    { key: 'settings', icon: '⚙️', title: '设置', desc: '偏好设置与通知', bg: styles.menuIconBg3 },
-    { key: 'about', icon: 'ℹ️', title: '关于我们', desc: '版本信息', bg: styles.menuIconBg4 },
+    { key: 'contacts', icon: '📱', title: 'Contact Sync', desc: 'Find registered friends', bg: styles.menuIconBg1 },
+    { key: 'history', icon: '📊', title: 'Game History', desc: 'View match history', bg: styles.menuIconBg2 },
+    { key: 'settings', icon: '⚙️', title: 'Settings', desc: 'Preferences and notifications', bg: styles.menuIconBg3 },
+    { key: 'about', icon: 'ℹ️', title: 'About', desc: 'Version info', bg: styles.menuIconBg4 },
   ];
 
   return (
@@ -96,24 +96,24 @@ const MinePage: React.FC = () => {
             <View className={styles.avatarWrap}>
               <View className={styles.avatar}>
                 <Text className={styles.avatarLetter}>
-                  {(profile?.nickname || '游').charAt(0)}
+                  {(profile?.nickname || 'D').charAt(0)}
                 </Text>
               </View>
             </View>
             <View className={styles.profileInfo}>
-              <Text className={styles.profileName}>{profile?.nickname || '未登录'}</Text>
+              <Text className={styles.profileName}>{profile?.nickname || 'Not logged in'}</Text>
               {isLoggedIn ? (
                 <Text className={styles.profileId}>ID: {profile?.openid || ''}</Text>
               ) : (
-                <Text className={styles.profileLoginHint}>点击登录账号 ›</Text>
+                <Text className={styles.profileLoginHint}>Tap to log in ›</Text>
               )}
               <Text className={styles.profileBio}>
-                {isLoggedIn ? (profile?.phone || '欢迎来到 Draw Together') : '登录后体验完整功能'}
+                {isLoggedIn ? (profile?.phone || 'Welcome to Draw Together') : 'Log in for full access'}
               </Text>
             </View>
             {isLoggedIn && (
               <View className={styles.editBtn} onClick={(e) => { e.stopPropagation(); handleEdit(); }}>
-                <Text className={styles.editBtnText}>编辑</Text>
+                <Text className={styles.editBtnText}>Edit</Text>
               </View>
             )}
           </View>
@@ -123,20 +123,20 @@ const MinePage: React.FC = () => {
           <View className={styles.statsCard}>
             <View className={styles.statItem}>
               <Text className={styles.statValue}>{profile?.gamesPlayed || 0}</Text>
-              <Text className={styles.statLabel}>总场次</Text>
+              <Text className={styles.statLabel}>Games</Text>
             </View>
             <View className={styles.statItem}>
               <Text className={styles.statValue}>{profile?.gamesWon || 0}</Text>
-              <Text className={styles.statLabel}>胜场</Text>
+              <Text className={styles.statLabel}>Wins</Text>
             </View>
             <View className={styles.statItem}>
               <Text className={styles.statValue}>{profile?.totalScore || 0}</Text>
-              <Text className={styles.statLabel}>总积分</Text>
+              <Text className={styles.statLabel}>Score</Text>
             </View>
           </View>
         )}
 
-        <Text className={styles.sectionTitle}>更多功能</Text>
+        <Text className={styles.sectionTitle}>More</Text>
 
         <View className={styles.menuList}>
           <View className={styles.menuGroup}>
@@ -166,7 +166,7 @@ const MinePage: React.FC = () => {
               onClick={() => { if (!loggingOut) setShowLogoutConfirm(true); }}
             >
               <Text className={styles.logoutBtnText}>
-                {loggingOut ? '退出中...' : '退出登录'}
+                {loggingOut ? 'Logging out...' : 'Log Out'}
               </Text>
             </View>
           </View>
@@ -178,9 +178,9 @@ const MinePage: React.FC = () => {
       {/* 退出登录确认弹窗（紫色渐变主题） */}
       <ConfirmModal
         visible={showLogoutConfirm}
-        title="退出登录"
-        content="确定要退出当前账号吗？"
-        confirmText="退出登录"
+        title="Log Out"
+        content="Are you sure you want to log out?"
+        confirmText="Log Out"
         onConfirm={handleLogout}
         onCancel={() => setShowLogoutConfirm(false)}
       />
@@ -196,12 +196,12 @@ const MinePage: React.FC = () => {
       {showEdit && (
         <View className={styles.overlay} onClick={() => setShowEdit(false)}>
           <View className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <Text className={styles.modalTitle}>编辑资料</Text>
+            <Text className={styles.modalTitle}>Edit Profile</Text>
             <View className={styles.inputGroup}>
-              <Text className={styles.inputLabel}>昵称</Text>
+              <Text className={styles.inputLabel}>Nickname</Text>
               <Input
                 className={styles.textInput}
-                placeholder="输入新昵称"
+                placeholder="Enter new nickname"
                 value={editName}
                 maxlength={16}
                 onInput={(e) => setEditName(e.detail.value)}
@@ -209,10 +209,10 @@ const MinePage: React.FC = () => {
             </View>
             <View className={styles.modalActions}>
               <Button className={styles.cancelBtn} onClick={() => setShowEdit(false)}>
-                取消
+                Cancel
               </Button>
               <Button className={styles.confirmBtn} onClick={handleSave}>
-                保存
+                Save
               </Button>
             </View>
           </View>

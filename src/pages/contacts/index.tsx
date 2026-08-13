@@ -44,7 +44,7 @@ const ContactsPage: React.FC = () => {
    */
   const readNativeContacts = async (): Promise<{ name: string; phone: string }[]> => {
     if (!Capacitor.isNativePlatform()) {
-      throw new Error('请在手机 App 中使用此功能');
+      throw new Error('Please use this feature in the mobile app');
     }
 
     try {
@@ -58,7 +58,7 @@ const ContactsPage: React.FC = () => {
         // requestPermissions 返回值在部分机型上不可信，再 check 一次
         const recheck = await Contacts.checkPermissions();
         if (recheck.contacts !== 'granted' && permResult.contacts !== 'granted') {
-          throw new Error('通讯录权限未授予，请在系统设置中手动开启');
+          throw new Error('Contacts permission not granted. Please enable it manually in system settings.');
         }
       }
 
@@ -80,7 +80,7 @@ const ContactsPage: React.FC = () => {
             (c.name?.given && c.name?.family ? `${c.name.given}${c.name.family}` : '') ||
             '';
           return {
-            name: displayName || '(无姓名)',
+            name: displayName || '(No name)',
             phone: String(phone).replace(/\s|-/g, ''),
           };
         })
@@ -98,7 +98,7 @@ const ContactsPage: React.FC = () => {
     try {
       const phoneContacts = await readNativeContacts();
       if (phoneContacts.length === 0) {
-        Taro.showToast({ title: '没有读取到任何联系人', icon: 'none' });
+        Taro.showToast({ title: 'No contacts found', icon: 'none' });
       }
       // 调用后端匹配已注册 + 好友关系 + 申请状态
       const result: any = await friendService.syncContacts(phoneContacts);
@@ -113,14 +113,14 @@ const ContactsPage: React.FC = () => {
       setSynced(true);
       const found = enriched.filter(c => c.registered).length;
       Taro.showToast({
-        title: `同步完成，找到${found}位已注册好友`,
+        title: `Sync complete, found ${found} registered friends`,
         icon: 'none',
       });
     } catch (err: any) {
       console.error('[Contacts] syncContacts:', err);
       // 直接显示真实错误信息，不再做"权限拒绝"的误判
-      const msg = err?.message || '同步失败';
-      Taro.showModal({ title: '同步失败', content: msg, showCancel: false });
+      const msg = err?.message || 'Sync Failed';
+      Taro.showModal({ title: 'Sync Failed', content: msg, showCancel: false });
     } finally {
       setLoading(false);
     }
@@ -133,12 +133,12 @@ const ContactsPage: React.FC = () => {
     setInvitingSet(prev => new Set(prev).add(contact.openid));
     try {
       const result = await messageService.inviteAndCreateRoom(contact.openid);
-      Taro.showToast({ title: '邀请已发送', icon: 'success' });
+      Taro.showToast({ title: 'Invite sent', icon: 'success' });
       Taro.redirectTo({
         url: `/pages/room/index?id=${result.roomId}&roomCode=${result.roomCode}`,
       });
     } catch (err: any) {
-      Taro.showToast({ title: err?.message || '邀请失败', icon: 'none' });
+      Taro.showToast({ title: err?.message || 'Invite failed', icon: 'none' });
     } finally {
       setInvitingSet(prev => {
         const next = new Set(prev);
@@ -155,7 +155,7 @@ const ContactsPage: React.FC = () => {
     setApplyingSet(prev => new Set(prev).add(contact.openid));
     try {
       await friendService.sendFriendRequest(contact.openid, '');
-      Taro.showToast({ title: '申请已发送', icon: 'success' });
+      Taro.showToast({ title: 'Request sent', icon: 'success' });
       // 本地更新状态为 requested
       setContacts(prev => prev.map(c =>
         c.phone === contact.phone && c.name === contact.name
@@ -163,7 +163,7 @@ const ContactsPage: React.FC = () => {
           : c
       ));
     } catch (err: any) {
-      Taro.showToast({ title: err?.message || '发送失败', icon: 'none' });
+      Taro.showToast({ title: err?.message || 'Send failed', icon: 'none' });
     } finally {
       setApplyingSet(prev => {
         const next = new Set(prev);
@@ -204,7 +204,7 @@ const ContactsPage: React.FC = () => {
     if (!c.registered || c.status === 'not_registered') {
       return (
         <View className={classnames(styles.contactBtn, styles.btnOffline)}>
-          <Text className={styles.btnTextDisabled}>未注册</Text>
+          <Text className={styles.btnTextDisabled}>Not Registered</Text>
         </View>
       );
     }
@@ -214,7 +214,7 @@ const ContactsPage: React.FC = () => {
         // 是好友但未上线 → 显示「未上线」 禁用
         return (
           <View className={classnames(styles.contactBtn, styles.btnOffline)}>
-            <Text className={styles.btnTextDisabled}>未上线</Text>
+            <Text className={styles.btnTextDisabled}>Offline</Text>
           </View>
         );
       }
@@ -223,14 +223,14 @@ const ContactsPage: React.FC = () => {
           className={classnames(styles.contactBtn, styles.btnInvite, inv && styles.btnInviting)}
           onClick={() => handleInviteFriend(c)}
         >
-          <Text className={styles.btnTextWhite}>{inv ? '创建中...' : '邀请'}</Text>
+          <Text className={styles.btnTextWhite}>{inv ? 'Creating...' : 'Invite'}</Text>
         </View>
       );
     }
     if (c.status === 'requested') {
       return (
         <View className={classnames(styles.contactBtn, styles.btnApplied)}>
-          <Text className={styles.btnTextApplied}>已申请</Text>
+          <Text className={styles.btnTextApplied}>Requested</Text>
         </View>
       );
     }
@@ -241,7 +241,7 @@ const ContactsPage: React.FC = () => {
         className={classnames(styles.contactBtn, styles.btnApply, applying && styles.btnApplying)}
         onClick={() => handleSendFriendRequest(c)}
       >
-        <Text className={styles.btnTextWhite}>{applying ? '发送中...' : '申请'}</Text>
+        <Text className={styles.btnTextWhite}>{applying ? 'Sending...' : 'Add'}</Text>
       </View>
     );
   };
@@ -250,16 +250,16 @@ const ContactsPage: React.FC = () => {
     <View className={styles.container}>
       {/* 头部说明 */}
       <View className={styles.header}>
-        <Text className={styles.headerTitle}>联系人同步</Text>
+        <Text className={styles.headerTitle}>Sync Contacts</Text>
         <Text className={styles.headerDesc}>
-          同步手机通讯录，自动发现已注册「你画我猜」的好友，添加后即可邀请一起游戏。
+          Sync your phone contacts to automatically find friends already on Draw Together. Add them to invite them to play together.
         </Text>
         <Button
           className={classnames(styles.syncBtn, loading && styles.syncBtnDisabled)}
           onClick={doSyncContacts}
           disabled={loading}
         >
-          {loading ? '同步中...' : synced ? '重新同步' : '📱 同步联系人'}
+          {loading ? 'Syncing...' : synced ? 'Re-sync' : '📱 Sync Contacts'}
         </Button>
       </View>
 
@@ -280,10 +280,10 @@ const ContactsPage: React.FC = () => {
                   )}
                 >
                   {t === 'all'
-                    ? `全部(${contacts.length})`
+                    ? `All (${contacts.length})`
                     : t === 'registered'
-                    ? `已注册(${registeredCount})`
-                    : `未注册(${contacts.length - registeredCount})`}
+                    ? `Registered (${registeredCount})`
+                    : `Not Registered (${contacts.length - registeredCount})`}
                 </Text>
               </View>
             ))}
@@ -293,10 +293,10 @@ const ContactsPage: React.FC = () => {
           <View className={styles.contactList}>
             {loading ? (
               <View className={styles.loadingWrap}>
-                <Text className={styles.loadingText}>加载中...</Text>
+                <Text className={styles.loadingText}>Loading...</Text>
               </View>
             ) : filteredContacts.length === 0 ? (
-              <EmptyState icon="📋" title="暂无联系人" />
+              <EmptyState icon="📋" title="No contacts yet" />
             ) : (
               <ScrollView scrollY>
                 {filteredContacts.map((contact, idx) => {
@@ -314,10 +314,10 @@ const ContactsPage: React.FC = () => {
                       </View>
                       <View className={styles.contactInfo}>
                         <View style={{ display: 'flex', alignItems: 'center' }}>
-                          <Text className={styles.contactName}>{contact.name || '(无姓名)'}</Text>
+                          <Text className={styles.contactName}>{contact.name || '(No name)'}</Text>
                           {contact.registered && (
                             <View className={styles.registeredTag}>
-                              <Text className={styles.registeredText}>已注册</Text>
+                              <Text className={styles.registeredText}>Registered</Text>
                             </View>
                           )}
                         </View>
@@ -336,8 +336,8 @@ const ContactsPage: React.FC = () => {
       {!synced && !loading && (
         <EmptyState
           icon="📱"
-          title="点击上方按钮同步联系人"
-          desc="同步后可发现已注册的好友"
+          title="Tap the button above to sync contacts"
+          desc="Sync to find registered friends"
         />
       )}
     </View>

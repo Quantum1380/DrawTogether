@@ -12,9 +12,9 @@ interface FriendItemProps {
 }
 
 const statusText: Record<string, string> = {
-  online: '在线',
-  offline: '离线',
-  busy: '游戏中',
+  online: 'Online',
+  offline: 'Offline',
+  busy: 'In Game',
 };
 
 const FriendItem: React.FC<FriendItemProps> = ({ friend, onInvite, showInvite = true }) => {
@@ -34,11 +34,11 @@ const FriendItem: React.FC<FriendItemProps> = ({ friend, onInvite, showInvite = 
               friend.status === 'busy' && styles.busy
             )}
           >
-            {statusText[friend.status] || '离线'}
+            {statusText[friend.status] || 'Offline'}
           </Text>
         </View>
         <Text className={styles.stats}>
-          已玩{friend.gamesPlayed}场 · 胜{friend.gamesWon}场
+          Played {friend.gamesPlayed} games · Won {friend.gamesWon}
         </Text>
       </View>
       {canInvite ? (
@@ -46,11 +46,11 @@ const FriendItem: React.FC<FriendItemProps> = ({ friend, onInvite, showInvite = 
           className={styles.inviteBtn}
           onClick={() => onInvite?.(friend)}
         >
-          邀请
+          Invite
         </Button>
       ) : friend.status === 'busy' ? (
         <View className={styles.busyTag}>
-          <Text className={styles.busyText}>忙碌</Text>
+          <Text className={styles.busyText}>Busy</Text>
         </View>
       ) : null}
     </View>

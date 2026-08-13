@@ -21,10 +21,10 @@ const messageIcons: Record<string, string> = {
 };
 
 const filterLabel: Record<FilterType, string> = {
-  all: '全部',
-  invite: '邀请',
-  friend_request: '申请',
-  system: '系统',
+  all: 'All',
+  invite: 'Invites',
+  friend_request: 'Requests',
+  system: 'System',
 };
 
 const MessagesPage: React.FC = () => {
@@ -85,11 +85,12 @@ const MessagesPage: React.FC = () => {
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
-    if (minutes < 1) return '刚刚';
-    if (minutes < 60) return `${minutes}分钟前`;
-    if (hours < 24) return `${hours}小时前`;
-    if (days < 7) return `${days}天前`;
-    return `${date.getMonth() + 1}月${date.getDate()}日`;
+    if (minutes < 1) return 'Just now';
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    if (days < 7) return `${days}d ago`;
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return `${months[date.getMonth()]} ${date.getDate()}`;
   };
 
   const parseMsgData = (m: MessageItem) => {
@@ -104,21 +105,21 @@ const MessagesPage: React.FC = () => {
     const roomId = data?.roomId;
     const roomCode = data?.roomCode;
     if (!roomId || !roomCode) {
-      Taro.showToast({ title: '邀请信息无效', icon: 'none' });
+      Taro.showToast({ title: 'Invalid invite', icon: 'none' });
       return;
     }
 
     setCheckingInviteIds(prev => new Set(prev).add(msg._id));
-    Taro.showLoading({ title: '加入房间...', mask: true });
+    Taro.showLoading({ title: 'Joining...', mask: true });
     try {
       const result = await messageService.checkInviteRoom(roomId);
       if (!result.exists) {
         // 房间不存在
         Taro.showModal({
-          title: '提示',
-          content: '房主已退出房间',
+          title: 'Notice',
+          content: 'Host has left the room',
           showCancel: false,
-          confirmText: '知道了',
+          confirmText: 'OK',
           confirmColor: '#6366F1',
         });
         return;
@@ -128,7 +129,7 @@ const MessagesPage: React.FC = () => {
         await roomService.joinRoom(roomCode);
       } catch (e: any) {
         // 房间已开始/已满等错误直接提示
-        Taro.showToast({ title: e?.message || '加入失败', icon: 'none' });
+        Taro.showToast({ title: e?.message || 'Join failed', icon: 'none' });
         return;
       }
       // 加入房间
@@ -139,7 +140,7 @@ const MessagesPage: React.FC = () => {
         url: `/pages/room/index?id=${roomId}&roomCode=${roomCode}`,
       });
     } catch (err: any) {
-      Taro.showToast({ title: err?.message || '加入失败', icon: 'none' });
+      Taro.showToast({ title: err?.message || 'Join failed', icon: 'none' });
     } finally {
       Taro.hideLoading();
       setCheckingInviteIds(prev => {
@@ -154,7 +155,7 @@ const MessagesPage: React.FC = () => {
     try {
       await messageService.markRead([msg._id]);
       setMessages(prev => prev.filter(m => m._id !== msg._id));
-      Taro.showToast({ title: '已拒绝', icon: 'none' });
+      Taro.showToast({ title: 'Declined', icon: 'none' });
     } catch (err) {
       console.error('[Message] rejectInvite:', err);
     }
@@ -166,13 +167,13 @@ const MessagesPage: React.FC = () => {
     setHandlingRequestIds(prev => new Set(prev).add(req.requestId));
     try {
       await friendService.acceptFriendRequest(req.requestId);
-      Taro.showToast({ title: '已添加好友', icon: 'success' });
+      Taro.showToast({ title: 'Friend added', icon: 'success' });
       // 从列表移除
       setFriendRequests(prev => prev.filter(r => r.requestId !== req.requestId));
       // 刷新好友列表数据（也重新加载消息）
       loadMessages();
     } catch (err: any) {
-      Taro.showToast({ title: err?.message || '操作失败', icon: 'none' });
+      Taro.showToast({ title: err?.message || 'Operation failed', icon: 'none' });
     } finally {
       setHandlingRequestIds(prev => {
         const next = new Set(prev);
@@ -188,10 +189,10 @@ const MessagesPage: React.FC = () => {
     setHandlingRequestIds(prev => new Set(prev).add(req.requestId));
     try {
       await friendService.rejectFriendRequest(req.requestId);
-      Taro.showToast({ title: '已拒绝', icon: 'none' });
+      Taro.showToast({ title: 'Declined', icon: 'none' });
       setFriendRequests(prev => prev.filter(r => r.requestId !== req.requestId));
     } catch (err: any) {
-      Taro.showToast({ title: err?.message || '操作失败', icon: 'none' });
+      Taro.showToast({ title: err?.message || 'Operation failed', icon: 'none' });
     } finally {
       setHandlingRequestIds(prev => {
         const next = new Set(prev);
@@ -231,11 +232,11 @@ const MessagesPage: React.FC = () => {
     return (
       <>
         <Text className={styles.messageText}>
-          {`${fromNickname} 邀请你加入房间 ${roomCode}，一起来玩你画我猜！`}
+          {`${fromNickname} invited you to join room ${roomCode}. Come play Draw Together!`}
         </Text>
         {accepted ? (
           <View className={styles.acceptedTag}>
-            <Text className={styles.acceptedText}>已接受邀请</Text>
+            <Text className={styles.acceptedText}>Invite accepted</Text>
           </View>
         ) : (
           <View className={styles.messageActions}>
@@ -243,13 +244,13 @@ const MessagesPage: React.FC = () => {
               className={styles.rejectBtn}
               onClick={(e) => { e.stopPropagation(); handleRejectInvite(msg); }}
             >
-              <Text>拒绝</Text>
+              <Text>Decline</Text>
             </View>
             <View
               className={styles.acceptBtn}
               onClick={(e) => { e.stopPropagation(); handleAcceptInvite(msg); }}
             >
-              <Text>{checking ? '检查中...' : '加入房间'}</Text>
+              <Text>{checking ? 'Checking...' : 'Join Room'}</Text>
             </View>
           </View>
         )}
@@ -297,7 +298,7 @@ const MessagesPage: React.FC = () => {
       <View className={styles.messageList}>
         {loading ? (
           <View className={styles.loadingWrap}>
-            <Text className={styles.loadingText}>加载中...</Text>
+            <Text className={styles.loadingText}>Loading...</Text>
           </View>
         ) : (
           <ScrollView scrollY className={styles.scrollView}>
@@ -328,21 +329,21 @@ const MessagesPage: React.FC = () => {
                     </View>
                     <Text className={styles.messageText}>
                       {req.message
-                        ? `请求添加你为好友：${req.message}`
-                        : '请求添加你为好友'}
+                        ? `wants to add you as a friend: ${req.message}`
+                        : 'wants to add you as a friend'}
                     </Text>
                     <View className={styles.messageActions}>
                       <View
                         className={styles.rejectBtn}
                         onClick={(e) => { e.stopPropagation(); handleRejectFriendRequest(req); }}
                       >
-                        <Text>{handling ? '处理中...' : '拒绝'}</Text>
+                        <Text>{handling ? 'Processing...' : 'Decline'}</Text>
                       </View>
                       <View
                         className={styles.acceptBtn}
                         onClick={(e) => { e.stopPropagation(); handleAcceptFriendRequest(req); }}
                       >
-                        <Text>{handling ? '处理中...' : '同意'}</Text>
+                        <Text>{handling ? 'Processing...' : 'Accept'}</Text>
                       </View>
                     </View>
                   </View>
@@ -372,9 +373,9 @@ const MessagesPage: React.FC = () => {
                   <View className={styles.messageContent}>
                     <View className={styles.messageHeader}>
                       <Text className={styles.messageFrom}>
-                        {msg.type === 'invite' ? '游戏邀请' :
-                         msg.type === 'friend_request' ? '好友申请' :
-                         msg.type === 'system' ? '系统通知' : '消息'}
+                        {msg.type === 'invite' ? 'Game Invite' :
+                         msg.type === 'friend_request' ? 'Friend Request' :
+                         msg.type === 'system' ? 'System Notification' : 'Message'}
                       </Text>
                       <Text className={styles.messageTime}>{formatTime(msg.createTime)}</Text>
                     </View>
@@ -397,12 +398,12 @@ const MessagesPage: React.FC = () => {
                 ((filter === 'invite' || filter === 'system') && filteredMessages.length === 0);
               if (!showEmpty) return null;
               const tips = filter === 'friend_request'
-                ? { icon: '👋', title: '暂无好友申请', desc: '等好友发来申请吧' }
+                ? { icon: '👋', title: 'No friend requests', desc: 'Waiting for friend requests' }
                 : filter === 'invite'
-                  ? { icon: '🎮', title: '暂无游戏邀请', desc: '让好友邀请你玩' }
+                  ? { icon: '🎮', title: 'No game invites', desc: 'Ask a friend to invite you' }
                   : filter === 'system'
-                    ? { icon: '📢', title: '暂无系统通知', desc: '会在这里发布' }
-                    : { icon: '📬', title: '暂无消息', desc: '邀请好友一起玩游戏吧' };
+                    ? { icon: '📢', title: 'No system notifications', desc: 'Will be posted here' }
+                    : { icon: '📬', title: 'No messages', desc: 'Invite friends to play together' };
               return (
                 <View style={{ paddingTop: 40 }}>
                   <EmptyState icon={tips.icon} title={tips.title} desc={tips.desc} />
