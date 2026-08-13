@@ -72,6 +72,7 @@ router.post('/sync-contacts', authMiddleware, async (req: AuthRequest, res) => {
         registered: !!user,
         avatar: user?.avatar || '',
         openid: user?.openid || '',
+        nickname: user?.nickname || '',
         // 已注册时：返回是否已是好友、是否已发送 pending 申请
         status: user ? (
           friendSet.has(user.openid) ? 'friend'
@@ -90,6 +91,7 @@ router.post('/sync-contacts', authMiddleware, async (req: AuthRequest, res) => {
       registered: c.registered,
       registeredOpenid: c.openid || '',
       registeredAvatar: c.avatar || '',
+      registeredNickname: c.nickname || '',
     }));
     const registeredCount = contactsSnapshot.filter(c => c.registered).length;
     await UserContact.findOneAndUpdate(
@@ -112,7 +114,7 @@ router.post('/sync-contacts', authMiddleware, async (req: AuthRequest, res) => {
   }
 });
 
-// 搜索用户 - 支持按用户名、昵称、手机号搜索
+// 搜索用户 - 支持按昵称、手机号、UID搜索
 // 返回结果附带：isFriend（是否已是好友）、hasRequested（是否已发送pending申请）
 // 未注册的用户不在搜索结果里（搜索仅针对已注册用户）
 router.get('/search', authMiddleware, async (req: AuthRequest, res) => {
@@ -124,7 +126,7 @@ router.get('/search', authMiddleware, async (req: AuthRequest, res) => {
     const kw = keyword.trim();
     // 转义正则特殊字符，防止用户输入的 . * + ? 等被当作正则元字符
     const escapedKw = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    // 用户名/昵称/手机号：大小写不敏感的包含匹配
+    // 昵称/手机号：大小写不敏感的包含匹配
     const kwRegex = new RegExp(escapedKw, 'i');
     // UID（openid）：大小写不敏感的前缀匹配，支持「输入部分 UID 命中」
     // 例如输入 "9E4" 能命中 "9E4YAY"；输入小写 "9e4yay" 也能命中 "9E4YAY"
@@ -136,13 +138,12 @@ router.get('/search', authMiddleware, async (req: AuthRequest, res) => {
         {
           $or: [
             { openid: { $regex: uidRegex } },
-            { username: { $regex: kwRegex } },
             { nickname: { $regex: kwRegex } },
             { phone: { $regex: kwRegex } },
           ],
         },
       ],
-    }).select('openid username nickname avatar phone status').limit(20).lean();
+    }).select('openid nickname avatar phone status').limit(20).lean();
 
     // 当前用户的好友关系
     const friendRecords = await Friend.find({ openid: req.openid }).select('friendOpenid').lean();
@@ -157,7 +158,6 @@ router.get('/search', authMiddleware, async (req: AuthRequest, res) => {
 
     const results = users.map(u => ({
       openid: u.openid,
-      username: u.username,
       nickname: u.nickname,
       avatar: u.avatar || '',
       phone: u.phone || '',
@@ -253,7 +253,6 @@ router.get('/requests/incoming', authMiddleware, async (req: AuthRequest, res) =
         fromOpenid: r.fromOpenid,
         fromNickname: u?.nickname || '',
         fromAvatar: u?.avatar || '',
-        fromUsername: u?.username || '',
         message: r.message || '',
         createTime: r.createTime,
         status: r.status,

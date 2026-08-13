@@ -46,11 +46,11 @@ export function createDevRouter() {
   // 查看所有用户的在线状态(排查用)
   router.get('/users-status', async (_req, res) => {
     try {
-      const users = await User.find({}, 'username nickname status').lean();
+      const users = await User.find({}, 'phone nickname status').lean();
       return res.json({
         code: 0,
         message: 'ok',
-        data: users.map((u) => ({ username: u.username, nickname: u.nickname, status: u.status })),
+        data: users.map((u) => ({ phone: u.phone, nickname: u.nickname, status: u.status })),
       });
     } catch (err) {
       return res.json({ code: 1, message: '查询失败', data: null });

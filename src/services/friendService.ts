@@ -3,7 +3,6 @@ import type { Friend, Contact } from '@/types/user';
 
 export interface SearchUser {
   openid: string;
-  username: string;
   nickname: string;
   avatar: string;
   phone: string;

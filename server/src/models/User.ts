@@ -70,12 +70,13 @@ export async function generateUniqueUid(): Promise<string> {
 }
 
 const UserSchema = new Schema<IUser>({
-  openid: { type: String, required: true, unique: true, default: () => generateUid(6) },
-  username: { type: String, required: true, unique: true, trim: true, minlength: 2, maxlength: 20 },
+  openid: { type: String, required: true, unique: true },
+  // username 自动设为 UID（openid），不再由用户输入
+  username: { type: String, required: true, unique: true, trim: true },
   password: { type: String, required: true },
   nickname: { type: String, required: true, trim: true, maxlength: 20 },
   avatar: { type: String, default: '' },
-  phone: { type: String, default: '' },
+  phone: { type: String, required: true, unique: true, trim: true },
   status: { type: String, enum: ['online', 'offline', 'busy'], default: 'offline' },
   gamesPlayed: { type: Number, default: 0 },
   gamesWon: { type: Number, default: 0 },
@@ -85,9 +86,6 @@ const UserSchema = new Schema<IUser>({
 });
 
 UserSchema.index({ 'banStatus.banned': 1 });
-// phone sparse unique index：空字符串不参与唯一性约束，
-// 这样用用户名注册的用户 phone='' 不会冲突；只有手机号注册的用户 phone 才唯一
-UserSchema.index({ phone: 1 }, { unique: true, sparse: true });
 
 UserSchema.methods.toJSON = function () {
   const obj = this.toObject();

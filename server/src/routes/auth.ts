@@ -6,59 +6,9 @@ import { broadcastAdmin } from '../socket';
 
 const router = Router();
 
-// 注册（用户名方式）
-router.post('/register', async (req, res) => {
-  try {
-    const { username, password, nickname } = req.body;
-
-    if (!username || !password) {
-      return res.json({ code: 1, message: '用户名和密码不能为空', data: null });
-    }
-    if (password.length < 6) {
-      return res.json({ code: 1, message: '密码至少6位', data: null });
-    }
-
-    const existing = await User.findOne({ username });
-    if (existing) {
-      return res.json({ code: 1, message: '用户名已存在', data: null });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    // 显式生成 6 位 UID，确保查重，避免依赖 schema default（ObjectId 24位太长）
-    const openid = await generateUniqueUid();
-    const user = await User.create({
-      openid,
-      username,
-      password: hashedPassword,
-      nickname: nickname || username,
-      status: 'online',
-    });
-
-    const token = generateToken(user._id.toString(), user.openid);
-    const userData = user.toJSON();
-
-    // 通知管理后台：新玩家注册（列表 + 数据总览需要实时更新）
-    const payload: any = { ...userData };
-    payload._id = String(payload._id);
-    delete payload.password;
-    delete payload.__v;
-    broadcastAdmin('admin:player-registered', { player: payload });
-    broadcastAdmin('admin:stats-changed', {});
-
-    return res.json({
-      code: 0,
-      message: '注册成功',
-      data: { token, user: userData },
-    });
-  } catch (err) {
-    console.error('[Auth] register error:', err);
-    return res.json({ code: 1, message: '服务器错误', data: null });
-  }
-});
-
 // 注册（手机号方式）
-// username 自动设为 UID（openid），用户用手机号+密码登录
-router.post('/register-phone', async (req, res) => {
+// username 自动设为 UID（openid）
+router.post('/register', async (req, res) => {
   try {
     const { phone, password, nickname } = req.body;
 
@@ -68,13 +18,11 @@ router.post('/register-phone', async (req, res) => {
     if (password.length < 6) {
       return res.json({ code: 1, message: '密码至少6位', data: null });
     }
-    // 基本手机号格式校验：去掉空格/横线后至少 7 位数字
     const cleanPhone = String(phone).replace(/[\s-]/g, '');
     if (!/^\d{7,15}$/.test(cleanPhone)) {
       return res.json({ code: 1, message: '手机号格式不正确', data: null });
     }
 
-    // 检查手机号是否已注册
     const existing = await User.findOne({ phone: cleanPhone });
     if (existing) {
       return res.json({ code: 1, message: '该手机号已注册', data: null });
@@ -82,12 +30,11 @@ router.post('/register-phone', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const openid = await generateUniqueUid();
-    // username = UID，这样手机号注册的用户 username 和 openid 一致
     const user = await User.create({
       openid,
       username: openid,
       password: hashedPassword,
-      nickname: nickname || `用户${openid}`,
+      nickname: nickname || `User${openid}`,
       phone: cleanPhone,
       status: 'online',
     });
@@ -108,30 +55,24 @@ router.post('/register-phone', async (req, res) => {
       data: { token, user: userData },
     });
   } catch (err) {
-    console.error('[Auth] register-phone error:', err);
+    console.error('[Auth] register error:', err);
     return res.json({ code: 1, message: '服务器错误', data: null });
   }
 });
 
-// 登录（兼容用户名和手机号）
-// 输入框接受 username 或 phone，后端先按 username 查，查不到再按 phone 查
+// 登录（手机号+密码）
 router.post('/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { phone, password } = req.body;
 
-    if (!username || !password) {
-      return res.json({ code: 1, message: '用户名和密码不能为空', data: null });
+    if (!phone || !password) {
+      return res.json({ code: 1, message: '手机号和密码不能为空', data: null });
     }
 
-    // 先按 username 查
-    let user = await User.findOne({ username });
-    // 查不到则按 phone 查（手机号注册的用户用手机号登录）
+    const cleanPhone = String(phone).replace(/[\s-]/g, '');
+    const user = await User.findOne({ phone: cleanPhone });
     if (!user) {
-      const cleanPhone = String(username).replace(/[\s-]/g, '');
-      user = await User.findOne({ phone: cleanPhone });
-    }
-    if (!user) {
-      return res.json({ code: 1, message: '用户不存在', data: null });
+      return res.json({ code: 1, message: '该手机号未注册', data: null });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -139,7 +80,6 @@ router.post('/login', async (req, res) => {
       return res.json({ code: 1, message: '密码错误', data: null });
     }
 
-    // 拒绝被封禁用户登录
     if (user.banStatus?.banned) {
       return res.json({
         code: 1,

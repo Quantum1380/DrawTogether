@@ -12,13 +12,10 @@ interface LoginModalProps {
 }
 
 type Mode = 'login' | 'register';
-type RegisterMethod = 'username' | 'phone';
 
 const LoginModal: React.FC<LoginModalProps> = ({ visible, onClose, onSuccess }) => {
-  const { login, register, registerByPhone } = useUserStore();
+  const { login, register } = useUserStore();
   const [mode, setMode] = useState<Mode>('login');
-  const [registerMethod, setRegisterMethod] = useState<RegisterMethod>('username');
-  const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
@@ -28,8 +25,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ visible, onClose, onSuccess }) 
   useEffect(() => {
     if (visible) {
       setMode('login');
-      setRegisterMethod('username');
-      setUsername('');
       setPhone('');
       setPassword('');
       setNickname('');
@@ -39,53 +34,31 @@ const LoginModal: React.FC<LoginModalProps> = ({ visible, onClose, onSuccess }) 
   }, [visible]);
 
   const handleSubmit = async () => {
-    if (mode === 'login') {
-      if (!username.trim()) {
-        setErrorMsg('Please enter username or phone number');
-        return;
-      }
-      if (!password || password.length < 6) {
-        setErrorMsg('Password must be at least 6 characters');
-        return;
-      }
-    } else {
-      // Register mode
-      if (registerMethod === 'username') {
-        if (!username.trim()) {
-          setErrorMsg('Please enter a username');
-          return;
-        }
-      } else {
-        // phone registration
-        const cleanPhone = phone.trim().replace(/[\s-]/g, '');
-        if (!cleanPhone) {
-          setErrorMsg('Please enter a phone number');
-          return;
-        }
-        if (!/^\d{7,15}$/.test(cleanPhone)) {
-          setErrorMsg('Invalid phone number format');
-          return;
-        }
-      }
-      if (!password || password.length < 6) {
-        setErrorMsg('Password must be at least 6 characters');
-        return;
-      }
-      if (!nickname.trim()) {
-        setErrorMsg('Please enter a nickname');
-        return;
-      }
+    const cleanPhone = phone.trim().replace(/[\s-]/g, '');
+    if (!cleanPhone) {
+      setErrorMsg('Please enter your phone number');
+      return;
+    }
+    if (!/^\d{7,15}$/.test(cleanPhone)) {
+      setErrorMsg('Invalid phone number format');
+      return;
+    }
+    if (!password || password.length < 6) {
+      setErrorMsg('Password must be at least 6 characters');
+      return;
+    }
+    if (mode === 'register' && !nickname.trim()) {
+      setErrorMsg('Please enter a nickname');
+      return;
     }
 
     setLoading(true);
     setErrorMsg('');
     try {
       if (mode === 'login') {
-        await login(username.trim(), password);
-      } else if (registerMethod === 'username') {
-        await register(username.trim(), password, nickname.trim());
+        await login(cleanPhone, password);
       } else {
-        await registerByPhone(phone.trim(), password, nickname.trim());
+        await register(cleanPhone, password, nickname.trim());
       }
       Taro.showToast({
         title: mode === 'login' ? 'Login successful' : 'Registration successful',
@@ -137,50 +110,18 @@ const LoginModal: React.FC<LoginModalProps> = ({ visible, onClose, onSuccess }) 
           </View>
         </View>
 
-        {mode === 'register' && (
-          <View className={styles.subTabs}>
-            <View
-              className={classnames(styles.subTab, registerMethod === 'username' && styles.subTabActive)}
-              onClick={() => { setRegisterMethod('username'); setErrorMsg(''); }}
-            >
-              <Text className={styles.subTabText}>Username</Text>
-            </View>
-            <View
-              className={classnames(styles.subTab, registerMethod === 'phone' && styles.subTabActive)}
-              onClick={() => { setRegisterMethod('phone'); setErrorMsg(''); }}
-            >
-              <Text className={styles.subTabText}>Phone</Text>
-            </View>
-          </View>
-        )}
-
         <View className={styles.form}>
-          {mode === 'login' || registerMethod === 'username' ? (
-            <View className={styles.inputGroup}>
-              <Text className={styles.label}>
-                {mode === 'login' ? 'Username or Phone' : 'Username'}
-              </Text>
-              <Input
-                className={styles.input}
-                placeholder={mode === 'login' ? 'Enter username or phone' : 'Enter a username'}
-                value={username}
-                maxlength={20}
-                onInput={(e) => setUsername(e.detail.value)}
-              />
-            </View>
-          ) : (
-            <View className={styles.inputGroup}>
-              <Text className={styles.label}>Phone Number</Text>
-              <Input
-                className={styles.input}
-                placeholder="Enter your phone number"
-                value={phone}
-                type="number"
-                maxlength={15}
-                onInput={(e) => setPhone(e.detail.value)}
-              />
-            </View>
-          )}
+          <View className={styles.inputGroup}>
+            <Text className={styles.label}>Phone Number</Text>
+            <Input
+              className={styles.input}
+              placeholder="Enter your phone number"
+              value={phone}
+              type="number"
+              maxlength={15}
+              onInput={(e) => setPhone(e.detail.value)}
+            />
+          </View>
 
           {mode === 'register' && (
             <View className={styles.inputGroup}>

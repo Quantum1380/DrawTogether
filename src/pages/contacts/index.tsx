@@ -21,6 +21,7 @@ type FilterType = 'all' | 'registered' | 'unregistered';
  */
 interface EnrichedContact extends Contact {
   openid: string;
+  nickname: string;
   status: string;  // not_registered | friend | requested | not_friend
   isOnline: boolean;  // 是否已在线（需查询），初始化用 false，socket 不可用不影响展示
   registered: boolean;
@@ -301,7 +302,10 @@ const ContactsPage: React.FC = () => {
               <ScrollView scrollY>
                 {filteredContacts.map((contact, idx) => {
                   const key = `${contact.phone}-${idx}`;
-                  const [color1, color2] = getAvatarColor(contact.name || contact.openid || '?');
+                  const displayName = contact.registered && contact.nickname
+                    ? contact.nickname
+                    : contact.name || '(No name)';
+                  const [color1, color2] = getAvatarColor(displayName);
                   return (
                     <View key={key} className={styles.contactItem}>
                       <View
@@ -309,19 +313,22 @@ const ContactsPage: React.FC = () => {
                         style={{ background: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)` }}
                       >
                         <Text className={styles.contactAvatarText}>
-                          {contact.name.charAt(0) || '?'}
+                          {displayName.charAt(0)}
                         </Text>
                       </View>
                       <View className={styles.contactInfo}>
                         <View style={{ display: 'flex', alignItems: 'center' }}>
-                          <Text className={styles.contactName}>{contact.name || '(No name)'}</Text>
+                          <Text className={styles.contactName}>{displayName}</Text>
                           {contact.registered && (
                             <View className={styles.registeredTag}>
                               <Text className={styles.registeredText}>Registered</Text>
                             </View>
                           )}
                         </View>
-                        <Text className={styles.contactPhone}>{contact.phone}</Text>
+                        <Text className={styles.contactPhone}>
+                          @{contact.openid || contact.phone}
+                          {contact.registered ? ` · ${contact.phone}` : ''}
+                        </Text>
                       </View>
                       {renderButton(contact, key)}
                     </View>

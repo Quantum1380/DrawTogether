@@ -13,9 +13,8 @@ interface UserState {
   fetchUserProfile: () => Promise<void>;
   updateProfile: (data: Partial<UserProfile>) => Promise<void>;
   setProfile: (profile: UserProfile | null) => void;
-  login: (username: string, password: string) => Promise<void>;
-  register: (username: string, password: string, nickname?: string) => Promise<void>;
-  registerByPhone: (phone: string, password: string, nickname?: string) => Promise<void>;
+  login: (phone: string, password: string) => Promise<void>;
+  register: (phone: string, password: string, nickname?: string) => Promise<void>;
   logout: () => Promise<void>;
   checkLogin: () => boolean;
 }
@@ -84,18 +83,13 @@ export const useUserStore = create<UserState>((set, get) => ({
 
   setProfile: (profile) => set({ profile, loggedIn: !!profile }),
 
-  login: async (username, password) => {
-    const { user } = await authService.login(username, password);
+  login: async (phone, password) => {
+    const { user } = await authService.login(phone, password);
     set({ profile: user, loggedIn: true });
   },
 
-  register: async (username, password, nickname) => {
-    const { user } = await authService.register(username, password, nickname);
-    set({ profile: user, loggedIn: true });
-  },
-
-  registerByPhone: async (phone, password, nickname) => {
-    const { user } = await authService.registerByPhone(phone, password, nickname);
+  register: async (phone, password, nickname) => {
+    const { user } = await authService.register(phone, password, nickname);
     set({ profile: user, loggedIn: true });
   },
 

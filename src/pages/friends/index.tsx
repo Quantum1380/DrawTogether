@@ -202,7 +202,7 @@ const FriendsPage: React.FC = () => {
           <Text className={styles.searchIcon}>🔍</Text>
           <input
             className={styles.searchInput}
-            placeholder="Username, UID, or phone number"
+            placeholder="Search by nickname, phone, or UID"
             value={searchKey}
             onInput={(e) => handleSearchInput((e.target as HTMLInputElement).value)}
           />
@@ -247,7 +247,7 @@ const FriendsPage: React.FC = () => {
             </View>
           ) : (
             searchResults.map((user) => {
-              const [color1, color2] = getAvatarColor(user.nickname || user.username);
+              const [color1, color2] = getAvatarColor(user.nickname || user.openid);
 
               // 好友 + 在线 → 「邀请」（点击自动创建房间发送邀请）
               // 好友 + 离线 → 「未上线」（不可点击）
@@ -290,7 +290,7 @@ const FriendsPage: React.FC = () => {
                       style={{ background: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)` }}
                     >
                       <Text className={styles.friendInitial}>
-                        {(user.nickname || user.username).charAt(0)}
+                        {(user.nickname || user.openid).charAt(0)}
                       </Text>
                     </View>
                     <View
@@ -301,9 +301,9 @@ const FriendsPage: React.FC = () => {
                     />
                   </View>
                   <View className={styles.friendInfo}>
-                    <Text className={styles.friendName}>{user.nickname || user.username}</Text>
+                    <Text className={styles.friendName}>{user.nickname || user.openid}</Text>
                     <Text className={styles.friendSource}>
-                      @{user.username}
+                      @{user.openid}
                       {user.phone ? ` · ${user.phone}` : ''}
                     </Text>
                   </View>

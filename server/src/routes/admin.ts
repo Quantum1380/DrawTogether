@@ -140,8 +140,8 @@ export function createAdminRouter(_io?: any): Router {
       const query: any = {};
       if (keyword) {
         query.$or = [
-          { username: new RegExp(keyword, 'i') },
           { nickname: new RegExp(keyword, 'i') },
+          { phone: new RegExp(keyword, 'i') },
         ];
       }
       if (status === 'banned') query['banStatus.banned'] = true;
@@ -263,7 +263,6 @@ export function createAdminRouter(_io?: any): Router {
           return {
             _id: fu._id.toString(),
             openid: fu.openid,
-            username: fu.username,
             nickname: fu.nickname,
             avatar: fu.avatar || '',
             phone: fu.phone || '',
@@ -323,8 +322,7 @@ export function createAdminRouter(_io?: any): Router {
         action: 'ban',
         targetType: 'player',
         targetId: user._id.toString(),
-        targetName: user.username,
-        detail: `封禁原因: ${reason.trim()}`,
+        targetName: user.nickname,
         time: new Date().toISOString(),
       });
 
@@ -361,7 +359,7 @@ export function createAdminRouter(_io?: any): Router {
         action: 'unban',
         targetType: 'player',
         targetId: user._id.toString(),
-        targetName: user.username,
+        targetName: user.nickname,
         detail: '解除封禁',
         time: new Date().toISOString(),
       });
