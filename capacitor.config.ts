@@ -9,7 +9,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
  */
 const config: CapacitorConfig = {
   appId: 'com.drawtogether.app',
-  appName: '你画我猜',
+  appName: 'Draw Together',
   webDir: 'dist',
   server: {
     androidScheme: 'https',
