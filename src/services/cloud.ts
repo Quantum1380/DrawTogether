@@ -20,7 +20,7 @@ const isRn = process.env.TARO_ENV === 'rn';
 // - 当前阶段只用服务器公网 IP：用 http://，
 //   AndroidManifest.xml 已配置 usesCleartextTraffic=true 兜底；
 //   APK 的 CapacitorHttp 原生请求也不会受 WebView 明文限制
-const PUBLIC_SERVER = 'http://45.61.170.36';
+const PUBLIC_SERVER = 'https://drawguessgame.com';
 
 // H5 生产模式（NODE_ENV=production，比如 cap copy 内置到 APK）也要走绝对地址
 const isH5Prod = isH5 && process.env.NODE_ENV === 'production';
